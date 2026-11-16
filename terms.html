@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>서비스 이용약관 - ScaleRuler Pro</title>
+    <title>서비스 이용약관 (Terms of Service) - ScaleRuler Pro</title>
     <meta name="robots" content="index, follow">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -16,19 +16,29 @@
 
     <!-- 상단 네비게이션 -->
     <header class="bg-slate-900 border-b border-slate-800 px-4 sm:px-8 py-4 sticky top-0 z-20">
-        <div class="max-w-4xl mx-auto flex items-center justify-between">
+        <div class="max-w-4xl mx-auto flex flex-wrap items-center justify-between gap-3">
             <a href="index.html" class="flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-950 px-3 py-1.5 rounded-lg font-extrabold text-xs tracking-tight transition">
-                <span>📏 ScaleRuler Pro 홈으로 돌아가기</span>
+                <span class="lang-ko">📏 ScaleRuler Pro 홈으로 돌아가기</span>
+                <span class="lang-en hidden">📏 Back to ScaleRuler Pro</span>
             </a>
             <div class="flex items-center gap-4 text-xs font-medium text-slate-400">
-                <a href="privacy.html" class="hover:text-white transition">개인정보 처리방침</a>
-                <a href="terms.html" class="text-amber-300 font-bold">서비스 이용약관</a>
+                <a href="privacy.html" class="hover:text-white transition">
+                    <span class="lang-ko">개인정보 처리방침</span>
+                    <span class="lang-en hidden">Privacy Policy</span>
+                </a>
+                <a href="terms.html" class="text-amber-300 font-bold">
+                    <span class="lang-ko">서비스 이용약관</span>
+                    <span class="lang-en hidden">Terms of Service</span>
+                </a>
+                <button id="btn-lang" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 rounded-lg text-xs font-bold cursor-pointer">
+                    🌐 EN
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- 본문 -->
-    <main class="max-w-4xl mx-auto w-full px-4 sm:px-8 py-10 flex-1 space-y-8">
+    <!-- 한국어 본문 -->
+    <main class="max-w-4xl mx-auto w-full px-4 sm:px-8 py-10 flex-1 space-y-8 lang-ko">
         <div class="border-b border-slate-800 pb-6">
             <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">TERMS OF SERVICE</span>
             <h1 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">서비스 이용약관</h1>
@@ -43,7 +53,7 @@
 
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
                 <h2 class="text-base font-bold text-white">제2조 (서비스의 제공 및 무료 이용)</h2>
-                <p>본 서비스는 별도의 회원가입 없이 개인 및 기업 사용자 누구나 무료로 이용할 수 있습니다. 서비스의 무료 운영 및 서버·유지보수 비용 충당을 위해 화면 일부에 온라인 배너 광고(Google AdSense, Kakao AdFit 등)가 게재될 수 있습니다.</p>
+                <p>본 서비스는 별도의 회원가입 없이 개인 및 기업 사용자 누구나 무료로 이용할 수 있습니다. 서비스의 무료 운영 및 유지보수를 위해 화면 일부에 온라인 배너 광고(Google AdSense 등)가 게재될 수 있습니다.</p>
             </div>
 
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
@@ -62,16 +72,71 @@
         </section>
     </main>
 
+    <!-- 영어 본문 (English Version) -->
+    <main class="max-w-4xl mx-auto w-full px-4 sm:px-8 py-10 flex-1 space-y-8 lang-en hidden">
+        <div class="border-b border-slate-800 pb-6">
+            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">TERMS OF SERVICE</span>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Terms of Service</h1>
+            <p class="text-xs text-slate-400 mt-2">Effective Date: November 16, 2026</p>
+        </div>
+
+        <section class="space-y-6 text-xs sm:text-sm leading-relaxed text-slate-300">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                <h2 class="text-base font-bold text-white">1. Purpose</h2>
+                <p>These Terms of Service govern your use of <strong>ScaleRuler Pro</strong> ("the Service"), a free web-based screen ruler and CAD scale measurement application.</p>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                <h2 class="text-base font-bold text-white">2. Free Access & Advertisements</h2>
+                <p>The Service is provided free of charge for both personal and commercial use without registration. To support ongoing maintenance, online advertisements (such as Google AdSense) may be displayed on certain parts of the page.</p>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                <h2 class="text-base font-bold text-white">3. User Data & Local Processing</h2>
+                <ul class="list-disc list-inside space-y-1.5 text-slate-400">
+                    <li>You retain all rights and responsibility for any images, blueprints, or drawings you load into the Service.</li>
+                    <li>Because all files are processed strictly inside your local browser memory and never stored on our servers, closing or refreshing the browser tab will clear your current session. Please use the <strong>[Save PNG]</strong> or <strong>[Export CSV]</strong> buttons to save your results locally.</li>
+                </ul>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                <h2 class="text-base font-bold text-white">4. Disclaimer of Warranties & Limitation of Liability</h2>
+                <p>Measurement results (distance, area, and angle) depend on user-defined reference points, monitor DPI settings, and perspective distortion in the source image.</p>
+                <p class="text-amber-200/90">The Service is provided "AS IS" for estimation and reference purposes only. Always verify critical dimensions using certified physical measuring instruments before construction, manufacturing, or legal contracts. The operator shall not be liable for any direct or indirect damages arising from reliance on measurements made with this tool.</p>
+            </div>
+        </section>
+    </main>
+
     <!-- 하단 푸터 -->
     <footer class="bg-slate-950 border-t border-slate-900 text-slate-500 text-xs py-6 px-4 sm:px-8">
         <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
             <span>Copyright © 2026 ScaleRuler Pro. All rights reserved.</span>
             <div class="flex gap-4">
-                <a href="index.html" class="hover:text-amber-300">메인 측정 도구</a>
-                <a href="privacy.html" class="hover:text-amber-300">개인정보 처리방침</a>
-                <a href="terms.html" class="text-amber-300 font-bold">이용약관</a>
+                <a href="index.html" class="hover:text-amber-300">Home</a>
+                <a href="privacy.html" class="hover:text-amber-300">Privacy Policy</a>
+                <a href="terms.html" class="text-amber-300 font-bold">Terms of Service</a>
             </div>
         </div>
     </footer>
+
+    <script>
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            let lang = params.get('lang') || localStorage.getItem('sr_lang') || 'ko';
+            const btn = document.getElementById('btn-lang');
+            function render() {
+                document.documentElement.lang = lang;
+                btn.textContent = lang === 'ko' ? '🌐 EN' : '🌐 한국어';
+                document.querySelectorAll('.lang-ko').forEach(el => el.classList.toggle('hidden', lang !== 'ko'));
+                document.querySelectorAll('.lang-en').forEach(el => el.classList.toggle('hidden', lang !== 'en'));
+            }
+            btn.addEventListener('click', () => {
+                lang = lang === 'ko' ? 'en' : 'ko';
+                try { localStorage.setItem('sr_lang', lang); } catch (e) {}
+                render();
+            });
+            render();
+        })();
+    </script>
 </body>
 </html>

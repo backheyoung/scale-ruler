@@ -1,24 +1,331 @@
 /**
- * ScaleRuler Pro - 컴퓨터용 정밀 화면 자 & CAD 도면 배율 측정기
+ * ScaleRuler Pro - 컴퓨터용 정밀 화면 자 & CAD 도면 배율 측정기 (KO / EN Bilingual)
  * 100% Client-Side Processing (업로드한 이미지는 서버로 절대 전송되지 않습니다)
  */
 
-// ============================================================================
-// 💰 [광고 수익화 설정 (Google AdSense / Kakao AdFit)]
-// 애드센스 또는 카카오 애드핏 승인 후 아래 설정값만 입력하면 광고가 자동 표시됩니다.
-// ============================================================================
+// Google AdSense 연동 설정 (나중에 발급받은 코드를 넣으면 자동 활성화됩니다)
 const AD_CONFIG = {
-    enabled: false, // 광고 승인 후 true 로 변경하세요
-    provider: 'adsense', // 'adsense' 또는 'adfit'
-    adsenseClient: 'ca-pub-0000000000000000', // 본인 애드센스 게시자 ID
-    adsenseSlotSidebar: '0000000000',         // 사이드바 광고 단위 ID
-    adsenseSlotBanner: '0000000000',          // 하단 배너 광고 단위 ID
-    adfitUnitSidebar: 'DAN-xxxxxxxxxxxxxxxx', // 카카오 애드핏 사이드바 단위 ID
-    adfitUnitBanner: 'DAN-yyyyyyyyyyyyyyyy'   // 카카오 애드핏 배너 단위 ID
+    enabled: false,
+    adsenseClient: 'ca-pub-0000000000000000',
+    adsenseSlotSidebar: '0000000000',
+    adsenseSlotBanner: '0000000000'
+};
+
+// ============================================================================
+// 🌐 다국어 사전 (한국어 / English 완벽 지원)
+// ============================================================================
+const I18N = {
+    ko: {
+        badgePrivacy: '사진 서버전송 0% (안심보안)',
+        badgePrivacyShort: '보안안심',
+        btnCalibrate: '1단계: 2점 배율 보정',
+        btnMonitorCalib: '모니터 1:1 보정',
+        btnMeasure: '거리 측정',
+        btnArea: '면적·평수',
+        btnPoly: '연속거리',
+        btnAngle: '각도',
+        btnPan: '이동',
+        btnRuler: '📏 눈금자',
+        labelUnit: '단위:',
+        labelUnitOnly: '단위',
+        btnOpenImage: '사진/도면 열기',
+        btnSample: '🏠 샘플 도면',
+        btnSavePng: '이미지 저장',
+        btnHelp: '❓ 도움말',
+        labelCurrentScale: '현재 배율:',
+        btnDirectInput: '수치/축척 입력',
+        labelBgBrightness: '도면 밝기:',
+        btnRemoveBg: '사진제거',
+        btnUndo: '↩ 실행취소 (Ctrl+Z)',
+        labelCoords: '좌표:',
+        btnMobileList: '목록 보기',
+        welcomeTitle: '누구나 10초 만에 쓰는 정밀 측정 가이드',
+        welcomeStep1: '측정할 도면·사진을 Ctrl+V로 붙여넣거나 상단 [사진/도면 열기]로 불러옵니다.',
+        welcomeStep2: '상단 주황색 [1단계: 2점 배율 보정]을 누르고, 실제 길이를 아는 구간의 시작점·끝점을 클릭해 수치를 입력합니다.',
+        welcomeStep3: '이제 [거리 측정], [면적·평수], [각도] 버튼으로 어디든 클릭만 하면 실제 치수로 자동 환산됩니다!',
+        welcomeBtnSample: '샘플 평면도로 체험하기',
+        welcomeBtnDpi: '모니터 1:1 실물 자 맞추기',
+        welcomePrivacyNote: '<strong>올린 사진은 어떻게 되나요? (100% 안심 보안)</strong><br>불러온 사진·도면은 외부 서버로 절대 업로드되지 않으며, 오직 현재 사용자의 브라우저 메모리 안에서만 처리된 후 창을 닫으면 즉시 사라집니다.',
+        calibPopupTitle: '기준 구간 실제 치수 입력',
+        calibPopupDesc1: '방금 클릭한 두 점 사이의 화면 거리는',
+        calibPopupDesc2: '입니다. 이 구간의 실제 길이는 얼마입니까?',
+        calibPopupApply: '이 수치로 배율 확정 (Enter)',
+        btnPinClear: '핀 해제',
+        btnRulerOpacity: '투명도',
+        sidebarScaleTitle: '기준 배율 (Scale) 설정값',
+        btnRecalibrate: '2점 다시 찍기',
+        labelRefPx: '기준 픽셀 거리:',
+        labelRefReal: '실제 기준 치수:',
+        labelRatio: '환산 비율:',
+        sidebarLiveTitle: '실시간 측정 수치',
+        labelLiveDist: '실제 거리 (ΔL):',
+        labelLiveArea: '면적 (㎡·평):',
+        labelLivePoly: '누적 총길이:',
+        labelLiveAngleMain: '측정 각도:',
+        labelLiveCalib: '기준 거리:',
+        labelLiveDx: '가로 (ΔX)',
+        labelLiveDy: '세로 (ΔY)',
+        labelLivePx: '원본 픽셀 (px)',
+        labelLiveAngle: '각도 / 평수',
+        sidebarListTitle: '측정 기록',
+        btnCsv: '엑셀저장',
+        btnCopyAll: '전체복사',
+        btnClearAll: '비우기',
+        emptyListMsg: '아직 측정된 치수선이 없습니다.<br>화면에서 지점을 클릭하면 치수 기록이 저장되며,<br><strong>이름을 클릭해 메모</strong>를 남길 수 있습니다.',
+        card1Title: '마우스 2점 클릭 배율 보정',
+        card1Body: '축척을 모르는 아파트 평면도, 부동산 도면, 부품 사진이라도 걱정 없습니다. 도면에 적힌 치수 구간 하나만 찾아 시작점과 끝점을 클릭하고 실제 숫자(예: 3600 mm)를 입력하면 전체 도면의 픽셀 대 실제 길이 비율이 자동으로 맞춰집니다.',
+        card2Title: '거리 · 면적(평수) · 각도 동시 측정',
+        card2Body: '단순 직선 거리뿐만 아니라, 방의 대각선 두 점을 찍어 가로×세로 치수와 면적(㎡ 및 평수)을 한 번에 계산하는 면적 측정 모드, 여러 구간의 합계를 구하는 연속 거리 측정, 3점 각도기 기능을 모두 무료로 제공합니다.',
+        card3Title: '모니터 해상도(DPI) 1:1 실물 자',
+        card3Body: '사진 없이 모니터 화면에 실제 물건을 대고 길이를 재고 싶다면 상단 [🖥️ 모니터 1:1 보정]을 눌러보세요. 사용 중인 모니터 인치(15.6인치 노트북, 24인치, 27인치, 32인치 등)를 선택하거나 10cm 기준 막대를 조절해 내 모니터에 딱 맞는 1:1 실물 눈금자로 사용할 수 있습니다.',
+        secTitle: '이 사이트에 올린 사진·도면은 어떻게 처리되나요? (개인정보 및 보안 안내)',
+        secBadge: '서버 전송 ZERO · 100% 로컬 작동',
+        secDesc: 'ScaleRuler Pro는 서버리스 클라이언트(Client-Side Only) 아키텍처로 설계되었습니다. 사용자가 Ctrl+V로 붙여넣거나 파일 열기로 선택한 사진·설계 도면은 인터넷을 통해 외부 서버나 클라우드로 단 1바이트도 전송되지 않습니다.',
+        secBox1Title: '① 내 기기 안에서만 열림',
+        secBox1Body: '브라우저 표준 FileReader와 HTML5 Canvas 기술만을 사용하여 오직 사용자 본인의 PC·스마트폰 화면 메모리에만 이미지를 표시합니다.',
+        secBox2Title: '② 외부 유출 원천 차단',
+        secBox2Body: '별도의 파일 저장 서버나 데이터베이스(DB) 자체가 존재하지 않으므로, 제3자가 사용자가 올린 도면이나 사진을 열람하거나 수집하는 것이 불가능합니다.',
+        secBox3Title: '③ 창을 닫으면 즉시 완전 소멸',
+        secBox3Body: '브라우저 탭을 닫거나 새로고침(F5)하는 순간 메모리에서 이미지 데이터가 즉시 파기됩니다. 기업의 보안 도면이나 개인 사진도 안심하고 측정하세요.',
+        shortcutTitle: '빠른 작업을 위한 키보드 단축키',
+        scPaste: '클립보드 캡처 이미지 바로 붙여넣기',
+        scUndo: '방금 측정한 치수선 실행 취소',
+        scSnap: '수평(0°) · 대각선(45°) · 수직(90°) 직교 스냅',
+        scPan: '도면 화면 드래그 이동 (Pan)',
+        scModes: '모드 빠른 전환 (배율 / 거리 / 면적 / 연속 / 각도)',
+        scRotate: '플로팅 눈금자 가로 / 세로 회전',
+        faqTitle: '자주 묻는 질문 (FAQ)',
+        faq1Q: 'Q. 화면을 마우스 휠로 확대/축소하면 측정 치수가 달라지나요?',
+        faq1A: '아니요! 모든 기준선과 치수선은 원본 도면의 월드 좌표계를 기준으로 계산되므로, 마우스 휠로 아무리 확대해서 정밀하게 점을 찍어도 실제 치수(mm/cm/m)와 눈금자 간격이 정확하게 연동됩니다.',
+        faq2Q: 'Q. 이미 찍은 치수선의 위치를 조금 수정할 수 있나요?',
+        faq2A: '네! 측정 완료된 치수선의 양 끝 동그란 마커 위에 마우스를 가져가서 드래그하면 돋보기를 보면서 끝점 위치를 1픽셀 단위로 미세하게 수정할 수 있습니다.',
+        faq3Q: 'Q. 측정한 도면을 이미지나 엑셀로 저장할 수 있나요?',
+        faq3A: '상단 [💾 이미지 저장] 버튼을 누르면 도면 위에 치수선이 깔끔하게 그려진 PNG 파일이 다운로드되며, 우측 목록의 [엑셀저장] 버튼으로 CSV 표 파일을 내려받을 수 있습니다.',
+        footerBrand: 'ScaleRuler Pro (컴퓨터용 정밀 배율 측정 자)',
+        footerSub: '본 웹 서비스는 사용자의 이미지나 도면 파일을 서버로 수집·저장하지 않는 100% 브라우저 로컬 기반 무료 유틸리티입니다.',
+        footerPrivacy: '개인정보 처리방침',
+        footerTerms: '이용약관',
+        footerCookie: '쿠키 및 광고 안내',
+        footerSecurity: '사진 비저장 보안원리',
+        cookieBannerText: '🍪 개인정보 및 쿠키 안내: 본 사이트는 업로드하신 사진·도면을 서버에 절대 저장하지 않습니다. 다만 사용자 설정(배율·테마·언어) 유지 및 맞춤형 광고 제공을 위해 브라우저 쿠키(localStorage 포함)를 사용할 수 있습니다.',
+        cookieLearnMore: '자세히 보기',
+        cookieAccept: '확인 및 동의',
+        modalDirectTitle: '직접 배율 수치 입력',
+        modalDirectDesc: '화면의 몇 픽셀(px)이 실제 몇(mm/cm/m/inch)에 해당하는지 직접 입력하거나, 마우스로 2점을 찍어 보정할 수 있습니다.',
+        modalDirectPxLabel: '기준 화면 픽셀 길이 (px)',
+        modalDirectRealLabel: '대응하는 실제 치수',
+        modalDirectSave: '배율 적용하기',
+        modalDpiTitle: '모니터 화면 1:1 실물 크기 보정 (모니터 인치 / 10cm 기준)',
+        modalDpiDesc: '사용 중인 모니터 크기를 선택하거나, 화면에 실제 자를 대고 아래 노란색 기준 막대의 길이가 정확히 10 cm (100 mm)가 되도록 슬라이더를 조절하세요.',
+        modalDpiPresetLabel: '빠른 모니터 프리셋 선택:',
+        modalDpiBarHint: '실제 10cm (100mm) 길이와 일치하도록 맞춰주세요 ↔',
+        modalDpiSliderLabel: '100 mm 기준 픽셀 크기 조절:',
+        modalDpiApply: '이 크기로 1:1 실물 배율 적용하기',
+        btnConfirm: '확인',
+        // 동적 텍스트
+        guideCalibrate: '[1단계: 배율 설정] 실제 치수를 아는 구간의 시작점(1)과 끝점(2)을 클릭하세요. (Shift: 수평/수직 스냅)',
+        guideMeasure: '[거리 측정] 길이를 잴 두 지점(시작점 → 끝점)을 클릭하세요. (Shift: 직각 스냅, 끝점 마커 드래그 수정 가능)',
+        guideArea: '[면적·평수 측정] 방이나 사각형 영역의 대각선 모서리 두 점(시작 모서리 → 반대쪽 모서리)을 클릭하세요.',
+        guidePoly: '[연속 구간 측정] 여러 지점을 순서대로 클릭하고, 끝내려면 [우클릭] 또는 [Enter]를 누르세요.',
+        guideAngle: '[각도 측정] 시작점(1) → 꼭짓점(2) → 끝점(3) 순서로 세 지점을 클릭하세요.',
+        guidePan: '[화면 이동 모드] 마우스를 드래그하여 도면 위치를 이동하고, 마우스 휠로 확대/축소하세요.',
+        typeCalib: '배율 보정',
+        typeMeasure: '거리 측정',
+        typeArea: '면적·평수',
+        typePoly: '연속 거리',
+        typeAngle: '각도 측정',
+        typePan: '화면 이동',
+        canvasRefLine: '기준선',
+        canvasRefTemp: '기준 구간',
+        canvasClickToInput: '클릭하여 수치 입력',
+        canvasWidth: '가로',
+        canvasHeight: '세로',
+        canvasTotal: '총',
+        canvasCumul: '누적',
+        canvasRightClickDone: '우클릭 완료',
+        canvasClickVertex: '꼭짓점 클릭',
+        rulerLabelPrefix: '배율 연동 눈금자',
+        rulerTotal: '전체',
+        rulerPinDelta: '📌 핀 거리(Δ):',
+        toastTwoPointsClose: '두 지점이 너무 가깝습니다. 다시 클릭해 주세요.',
+        toastEnterPositive: '0보다 큰 실제 수치를 입력해 주세요.',
+        toastCalibDone: '배율 보정 완료! 이제 자유롭게 측정하세요.',
+        toastDpiDone: '모니터 1:1 실물 크기(100mm 기준) 보정이 적용되었습니다!',
+        toastDirectDone: '직접 배율 설정이 완료되었습니다.',
+        toastPolySaved: '연속 구간 거리 측정이 저장되었습니다.',
+        toastUndo: '마지막 측정 항목이 취소되었습니다.',
+        toastCleared: '모든 측정 기록이 비워졌습니다.',
+        toastNoCopy: '복사할 측정 기록이 없습니다.',
+        toastCopiedAll: '전체 측정 목록이 클립보드에 복사되었습니다!',
+        toastCopiedItem: '복사됨:',
+        toastNoCsv: '저장할 측정 기록이 없습니다.',
+        toastCsvSaved: '엑셀(CSV) 파일이 다운로드되었습니다.',
+        toastPngSaved: '치수선이 포함된 이미지가 PNG로 저장되었습니다!',
+        toastImgLoaded: '사진이 로드되었습니다! (서버 전송 없이 내 브라우저에서만 안전하게 열렸습니다)',
+        toastBgRemoved: '배경 이미지가 제거되었습니다.',
+        toastSampleLoaded: '샘플 평면도가 로드되었습니다! (기준 4200mm 보정 완료)',
+        toastClickTwoRef: '기준점 2점을 화면에서 클릭해 주세요.',
+        promptRename: '이 측정 항목의 이름(예: 안방 가로, 책상 길이)을 입력하세요:',
+        sampleBedroomWidth: '안방 가로폭',
+        sampleBedroomArea: '안방 면적'
+    },
+    en: {
+        badgePrivacy: '100% Local Privacy (No Upload)',
+        badgePrivacyShort: 'Local Only',
+        btnCalibrate: 'Step 1: 2-Pt Scale Calib',
+        btnMonitorCalib: '1:1 Monitor DPI',
+        btnMeasure: 'Distance',
+        btnArea: 'Area',
+        btnPoly: 'Multi-Segment',
+        btnAngle: 'Angle',
+        btnPan: 'Pan',
+        btnRuler: '📏 Ruler',
+        labelUnit: 'Unit:',
+        labelUnitOnly: 'Unit',
+        btnOpenImage: 'Open Image/Plan',
+        btnSample: '🏠 Sample Plan',
+        btnSavePng: 'Save PNG',
+        btnHelp: '❓ Guide',
+        labelCurrentScale: 'Scale:',
+        btnDirectInput: 'Manual Scale',
+        labelBgBrightness: 'Image Opacity:',
+        btnRemoveBg: 'Remove',
+        btnUndo: '↩ Undo (Ctrl+Z)',
+        labelCoords: 'Coords:',
+        btnMobileList: 'Records',
+        welcomeTitle: 'Quick 10-Second Measurement Guide',
+        welcomeStep1: 'Paste your blueprint or photo with Ctrl+V, or click [Open Image/Plan] at the top.',
+        welcomeStep2: 'Click [Step 1: 2-Pt Scale Calib], click two points of a known dimension, and enter its real length.',
+        welcomeStep3: 'Now use [Distance], [Area], or [Angle] to measure anywhere with automatic real-world scale conversion!',
+        welcomeBtnSample: 'Try Sample Floorplan',
+        welcomeBtnDpi: '1:1 Monitor Calibration',
+        welcomePrivacyNote: '<strong>What happens to uploaded photos? (100% Private)</strong><br>Your images and blueprints are NEVER uploaded to any server. Everything runs 100% locally inside your browser memory and disappears when you close the tab.',
+        calibPopupTitle: 'Enter Known Real Length',
+        calibPopupDesc1: 'The screen distance between the two points is',
+        calibPopupDesc2: '. What is the real-world length of this segment?',
+        calibPopupApply: 'Apply Scale (Enter)',
+        btnPinClear: 'Clear Pins',
+        btnRulerOpacity: 'Opacity',
+        sidebarScaleTitle: 'Reference Scale Settings',
+        btnRecalibrate: 'Re-pick 2 Pts',
+        labelRefPx: 'Ref Pixel Dist:',
+        labelRefReal: 'Ref Real Length:',
+        labelRatio: 'Scale Factor:',
+        sidebarLiveTitle: 'Live Readout',
+        labelLiveDist: 'Distance (ΔL):',
+        labelLiveArea: 'Area (m² / sq.ft):',
+        labelLivePoly: 'Total Length:',
+        labelLiveAngleMain: 'Angle:',
+        labelLiveCalib: 'Ref Dist:',
+        labelLiveDx: 'Width (ΔX)',
+        labelLiveDy: 'Height (ΔY)',
+        labelLivePx: 'Original Pixels',
+        labelLiveAngle: 'Angle / Area',
+        sidebarListTitle: 'Measurements',
+        btnCsv: 'Export CSV',
+        btnCopyAll: 'Copy All',
+        btnClearAll: 'Clear',
+        emptyListMsg: 'No measurements yet.<br>Click points on the canvas to measure.<br>Click any <strong>item badge to rename</strong> it.',
+        card1Title: '2-Point Click Scale Calibration',
+        card1Body: 'Even if you do not know the scale of a floorplan, blueprint, or photo, simply click the start and end points of one known dimension and enter its real value (e.g., 3600 mm) to calibrate the entire drawing automatically.',
+        card2Title: 'Measure Distance, Area & Angles',
+        card2Body: 'Measure point-to-point distances, click two diagonal corners to calculate rectangular width × height and area (m² & sq.ft / pyeong), sum multi-segment polylines, or measure 3-point angles effortlessly.',
+        card3Title: '1:1 Real-Size Monitor Ruler',
+        card3Body: 'Want to hold a physical object against your screen to measure it? Click [🖥️ 1:1 Monitor DPI] and select your screen size (15.6" laptop, 24", 27", 32", etc.) or match the 10cm bar to calibrate a true 1:1 physical screen ruler.',
+        secTitle: 'What Happens to Your Uploaded Photos & Blueprints? (Privacy Guarantee)',
+        secBadge: 'ZERO Server Upload · 100% Local',
+        secDesc: 'ScaleRuler Pro is built on a pure Client-Side Only architecture. Any image or CAD blueprint you open or paste (Ctrl+V) is never transmitted over the internet to any server or cloud storage.',
+        secBox1Title: '① Processed Only on Your Device',
+        secBox1Body: 'Uses standard browser FileReader and HTML5 Canvas APIs to render images strictly inside your own device memory (RAM).',
+        secBox2Title: '② Zero External Access',
+        secBox2Body: 'Because there is no backend upload server or database, neither the site operator nor any third party can ever view or collect your files.',
+        secBox3Title: '③ Instant Erasure on Close',
+        secBox3Body: 'As soon as you close or refresh (F5) the browser tab, the image data is wiped from memory. Safe for confidential blueprints and personal photos.',
+        shortcutTitle: 'Keyboard Shortcuts',
+        scPaste: 'Paste image from clipboard',
+        scUndo: 'Undo last measurement',
+        scSnap: '0° / 45° / 90° Ortho Snap',
+        scPan: 'Pan canvas view',
+        scModes: 'Switch modes (Calib / Dist / Area / Poly / Angle)',
+        scRotate: 'Rotate floating ruler (Horizontal / Vertical)',
+        faqTitle: 'Frequently Asked Questions (FAQ)',
+        faq1Q: 'Q. Does zooming in/out with the mouse wheel affect measurement accuracy?',
+        faq1A: 'No! All reference lines and measurements are calculated in the original world coordinate space of your image. Zooming in lets you place points with sub-pixel precision while keeping real dimensions accurate.',
+        faq2Q: 'Q. Can I fine-tune an endpoint after placing a measurement?',
+        faq2A: 'Yes! Hover over any circular endpoint marker and drag it while watching the 4x/8x magnifier loupe to adjust its position.',
+        faq3Q: 'Q. Can I export my measured blueprint or measurement list?',
+        faq3A: 'Click [💾 Save PNG] at the top to download a high-resolution image with all dimension lines drawn on it, or click [Export CSV] in the sidebar to download a spreadsheet file.',
+        footerBrand: 'ScaleRuler Pro (Online Screen & CAD Scale Ruler)',
+        footerSub: '100% client-side free web utility. Your images and blueprints are never uploaded to or stored on any server.',
+        footerPrivacy: 'Privacy Policy',
+        footerTerms: 'Terms of Service',
+        footerCookie: 'Cookie & Ad Policy',
+        footerSecurity: 'Local Privacy Guarantee',
+        cookieBannerText: '🍪 Privacy & Cookie Notice: This site never uploads your images to any server. We use browser storage (localStorage) and cookies to remember your preferences (scale, theme, language) and serve relevant ads.',
+        cookieLearnMore: 'Learn More',
+        cookieAccept: 'Accept & Close',
+        modalDirectTitle: 'Manual Scale Input',
+        modalDirectDesc: 'Enter how many screen pixels (px) correspond to a known real-world length (mm/cm/m/inch).',
+        modalDirectPxLabel: 'Reference Pixel Length (px)',
+        modalDirectRealLabel: 'Corresponding Real Value',
+        modalDirectSave: 'Apply Scale',
+        modalDpiTitle: '1:1 Physical Monitor Calibration (Screen Size / 10cm Bar)',
+        modalDpiDesc: 'Select your monitor size preset below, or hold a physical ruler against your screen and adjust the slider until the yellow bar is exactly 10 cm (100 mm) wide.',
+        modalDpiPresetLabel: 'Quick Monitor Size Presets:',
+        modalDpiBarHint: 'Match this bar to exactly 10 cm (100 mm) ↔',
+        modalDpiSliderLabel: 'Adjust Pixel Width for 100 mm:',
+        modalDpiApply: 'Apply 1:1 Physical Scale',
+        btnConfirm: 'OK',
+        // Dynamic strings
+        guideCalibrate: '[Step 1: Calibrate] Click the start (1) and end (2) points of a known dimension on your image. (Hold Shift to snap)',
+        guideMeasure: '[Distance Mode] Click two points (Start → End) to measure length. (Hold Shift to snap, drag endpoints to fine-tune)',
+        guideArea: '[Area Mode] Click two opposite diagonal corners of a room or rectangle to measure Width × Height & Area.',
+        guidePoly: '[Multi-Segment Mode] Click multiple points sequentially. Right-click, double-click, or press Enter to finish.',
+        guideAngle: '[Angle Mode] Click 3 points in order: Start (1) → Vertex (2) → End (3).',
+        guidePan: '[Pan Mode] Drag to move the canvas view, and use the mouse wheel to zoom in/out.',
+        typeCalib: 'Calibrate',
+        typeMeasure: 'Distance',
+        typeArea: 'Area',
+        typePoly: 'Polyline',
+        typeAngle: 'Angle',
+        typePan: 'Pan',
+        canvasRefLine: 'Ref',
+        canvasRefTemp: 'Ref Dist',
+        canvasClickToInput: 'Click to enter value',
+        canvasWidth: 'W',
+        canvasHeight: 'H',
+        canvasTotal: 'Total',
+        canvasCumul: 'Sum',
+        canvasRightClickDone: 'Right-click to finish',
+        canvasClickVertex: 'Click vertex',
+        rulerLabelPrefix: 'Scale Ruler',
+        rulerTotal: 'Total',
+        rulerPinDelta: '📌 Pin Δ:',
+        toastTwoPointsClose: 'The two points are too close. Please click again.',
+        toastEnterPositive: 'Please enter a valid number greater than 0.',
+        toastCalibDone: 'Scale calibrated! You can now measure freely.',
+        toastDpiDone: '1:1 Monitor physical scale (100mm ref) applied!',
+        toastDirectDone: 'Manual scale settings applied.',
+        toastPolySaved: 'Multi-segment polyline measurement saved.',
+        toastUndo: 'Last measurement undone.',
+        toastCleared: 'All measurements cleared.',
+        toastNoCopy: 'No measurements to copy.',
+        toastCopiedAll: 'All measurements copied to clipboard!',
+        toastCopiedItem: 'Copied:',
+        toastNoCsv: 'No measurements to export.',
+        toastCsvSaved: 'CSV spreadsheet file downloaded.',
+        toastPngSaved: 'Measured image saved as PNG!',
+        toastImgLoaded: 'Image loaded locally! (100% processed inside your browser)',
+        toastBgRemoved: 'Background image removed.',
+        toastSampleLoaded: 'Sample floorplan loaded! (Calibrated to 4200mm)',
+        toastClickTwoRef: 'Click 2 reference points on the screen.',
+        promptRename: 'Enter a label name for this measurement (e.g., Living Room Width):',
+        sampleBedroomWidth: 'Bedroom Width',
+        sampleBedroomArea: 'Bedroom Area'
+    }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    // --- 단위 환산 상수 (내부 계산 기준: mm) ---
     const UNIT_TO_MM = {
         mm: 1,
         cm: 10,
@@ -26,35 +333,31 @@ document.addEventListener('DOMContentLoaded', () => {
         inch: 25.4
     };
     const M2_PER_PYEONG = 3.305785;
+    const SQFT_PER_M2 = 10.7639104;
 
-    // --- 애플리케이션 상태 ---
     const state = {
+        lang: 'ko',               // 'ko' | 'en'
         mode: 'measure',          // 'calibrate' | 'measure' | 'area' | 'poly' | 'angle' | 'pan'
         displayUnit: 'mm',        // 'mm' | 'cm' | 'm' | 'inch' | 'px'
 
-        // 배율(Scale) 보정 상태: refPx 픽셀 = refRealValue (refRealUnit)
         refPx: 100,
         refRealValue: 100,
         refRealUnit: 'mm',
         mmPerPixel: 1.0,
 
-        // 기준선 및 임시 점
-        calibLine: null,          // { x1, y1, x2, y2 }
+        calibLine: null,
         tempPoints: [],
         mouseWorld: { x: 0, y: 0 },
         mouseScreen: { x: 0, y: 0 },
         isShiftDown: false,
         isSpaceDown: false,
 
-        // 측정 완료 항목들: [{ id, type: 'distance'|'area'|'poly'|'angle', points: [{x,y},...], name: string }]
         measurements: [],
         nextId: 1,
 
-        // 끝점 드래그 미세 수정 상태
-        draggingHandle: null,     // { target: 'calib'|'measurement', mIndex, ptIndex }
+        draggingHandle: null,
         hoveredHandle: null,
 
-        // 캔버스 뷰포트 변환 (Zoom & Pan)
         zoom: 1.0,
         panX: 0,
         panY: 0,
@@ -62,25 +365,26 @@ document.addEventListener('DOMContentLoaded', () => {
         panStartMouse: { x: 0, y: 0 },
         panStartOffset: { x: 0, y: 0 },
 
-        // 배경 도면/이미지
         bgImage: null,
         bgOpacity: 1.0,
 
-        // 플로팅 눈금자 상태
         rulerVisible: true,
-        rulerOrientation: 'horizontal', // 'horizontal' | 'vertical'
+        rulerOrientation: 'horizontal',
         rulerX: 60,
         rulerY: 380,
         rulerLength: 660,
         rulerBreadth: 86,
-        rulerOpacityMode: 0,            // 0: 90%, 1: 60%, 2: 100%
-        rulerPins: [],                  // 눈금자 위 클릭 고정 핀 [worldDistPx1, worldDistPx2]
+        rulerOpacityMode: 0,
+        rulerPins: [],
 
-        // 돋보기 배율
         loupeZoom: 4
     };
 
-    // --- DOM 요소 참조 ---
+    function t(key) {
+        return I18N[state.lang][key] || I18N.ko[key] || key;
+    }
+
+    // --- DOM 참조 ---
     const viewport = document.getElementById('canvas-viewport');
     const mainCanvas = document.getElementById('main-canvas');
     const ctx = mainCanvas.getContext('2d');
@@ -104,12 +408,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const rulerResizeGrip = document.getElementById('ruler-resize-grip');
     const btnRulerPinClear = document.getElementById('btn-ruler-pin-clear');
 
-    // 푸터 연도 표시
     const footerYear = document.getElementById('footer-year');
     if (footerYear) footerYear.textContent = new Date().getFullYear();
 
-    // --- 로컬 스토리지에서 이전 배율/테마 설정 복원 ---
+    // --- 로컬 스토리지 및 초기 언어 복원 ---
     try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const paramLang = urlParams.get('lang');
+        const savedLang = localStorage.getItem('sr_lang');
+        if (paramLang === 'en' || paramLang === 'ko') {
+            state.lang = paramLang;
+        } else if (savedLang === 'en' || savedLang === 'ko') {
+            state.lang = savedLang;
+        } else if (navigator.language && !navigator.language.toLowerCase().startsWith('ko')) {
+            state.lang = 'en';
+        }
+
         const savedTheme = localStorage.getItem('sr_theme');
         if (savedTheme === 'light') {
             document.documentElement.classList.add('light-mode');
@@ -129,16 +443,40 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!cookieAccepted) {
             document.getElementById('cookie-banner').classList.remove('hidden');
         }
-    } catch (err) {
-        // 스토리지 차단 환경 무시
+    } catch (err) {}
+
+    // --- 언어 변경 적용 함수 ---
+    function applyLanguage(lang) {
+        state.lang = lang;
+        document.documentElement.lang = lang;
+        document.getElementById('lang-toggle-label').textContent = lang === 'ko' ? 'EN' : '한국어';
+
+        try { localStorage.setItem('sr_lang', lang); } catch (e) {}
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            const val = t(key);
+            if (key === 'welcomePrivacyNote') {
+                el.innerHTML = val;
+            } else {
+                el.textContent = val;
+            }
+        });
+
+        setMode(state.mode);
+        recalculateScale();
     }
+
+    document.getElementById('btn-lang-toggle').addEventListener('click', () => {
+        applyLanguage(state.lang === 'ko' ? 'en' : 'ko');
+    });
 
     document.getElementById('btn-accept-cookies').addEventListener('click', () => {
         try { localStorage.setItem('sr_cookie_consent', '1'); } catch (e) {}
         document.getElementById('cookie-banner').classList.add('hidden');
     });
 
-    // --- 토스트 메시지 ---
+    // --- 토스트 알림 ---
     let toastTimeout = null;
     function showToast(msg) {
         const toast = document.getElementById('toast');
@@ -150,7 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 2800);
     }
 
-    // --- 좌표 변환 함수 ---
+    // --- 좌표 변환 ---
     function screenToWorld(sx, sy) {
         return {
             x: (sx - state.panX) / state.zoom,
@@ -200,29 +538,37 @@ document.addEventListener('DOMContentLoaded', () => {
             return {
                 main: `${Math.round(areaPx).toLocaleString()} px²`,
                 sub: `${widthPx.toFixed(0)} × ${heightPx.toFixed(0)} px`,
-                pyeong: '-'
+                extra: '-'
             };
         }
         const wMm = widthPx * state.mmPerPixel;
         const hMm = heightPx * state.mmPerPixel;
         const areaM2 = (wMm * hMm) / 1_000_000;
-        const pyeong = areaM2 / M2_PER_PYEONG;
 
-        let mainStr = '';
-        if (areaM2 >= 0.05) {
-            mainStr = `${areaM2.toFixed(2)} m² (${pyeong.toFixed(2)}평)`;
+        if (state.lang === 'en') {
+            const sqft = areaM2 * SQFT_PER_M2;
+            const mainStr = areaM2 >= 0.05
+                ? `${areaM2.toFixed(2)} m² (${sqft.toFixed(1)} sq.ft)`
+                : `${((wMm * hMm) / 100).toFixed(1)} cm²`;
+            return {
+                main: mainStr,
+                sub: `W ${formatWorldDistance(widthPx)} × H ${formatWorldDistance(heightPx)}`,
+                extra: `${sqft.toFixed(1)} sq.ft`
+            };
         } else {
-            const areaCm2 = (wMm * hMm) / 100;
-            mainStr = `${areaCm2.toFixed(1)} cm²`;
+            const pyeong = areaM2 / M2_PER_PYEONG;
+            const mainStr = areaM2 >= 0.05
+                ? `${areaM2.toFixed(2)} m² (${pyeong.toFixed(2)}평)`
+                : `${((wMm * hMm) / 100).toFixed(1)} cm²`;
+            return {
+                main: mainStr,
+                sub: `가로 ${formatWorldDistance(widthPx)} × 세로 ${formatWorldDistance(heightPx)}`,
+                extra: `${pyeong.toFixed(2)}평`
+            };
         }
-        return {
-            main: mainStr,
-            sub: `가로 ${formatWorldDistance(widthPx)} × 세로 ${formatWorldDistance(heightPx)}`,
-            pyeong: `${pyeong.toFixed(2)}평`
-        };
     }
 
-    // --- 배율 재계산 및 UI 동기화 ---
+    // --- 배율 재계산 ---
     function recalculateScale() {
         const realMm = state.refRealValue * UNIT_TO_MM[state.refRealUnit];
         state.mmPerPixel = realMm / state.refPx;
@@ -231,7 +577,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const perPxInDisplayUnit = state.mmPerPixel / (UNIT_TO_MM[unit] || 1);
 
         document.getElementById('badge-scale-status').textContent =
-            `기준 ${state.refPx.toFixed(1)} px = ${state.refRealValue} ${state.refRealUnit} (1 px = ${perPxInDisplayUnit.toFixed(4)} ${unit})`;
+            `${state.refPx.toFixed(1)} px = ${state.refRealValue} ${state.refRealUnit} (1 px = ${perPxInDisplayUnit.toFixed(4)} ${unit})`;
 
         document.getElementById('sidebar-ref-px').textContent = `${state.refPx.toFixed(1)} px`;
         document.getElementById('sidebar-ref-real').textContent = `${state.refRealValue} ${state.refRealUnit}`;
@@ -269,38 +615,38 @@ document.addEventListener('DOMContentLoaded', () => {
             const btn = document.getElementById('btn-mode-calibrate');
             btn.classList.add('active-calib');
             btn.classList.remove('pulse-highlight');
-            guideText.textContent = '[1단계: 배율 설정] 실제 치수를 아는 구간의 시작점(1)과 끝점(2)을 클릭하세요. (Shift: 수평/수직 스냅)';
-            liveTypeBadge.textContent = '배율 보정';
-            liveMainLabel.textContent = '기준 거리:';
+            guideText.textContent = t('guideCalibrate');
+            liveTypeBadge.textContent = t('typeCalib');
+            liveMainLabel.textContent = t('labelLiveCalib');
             viewport.style.cursor = 'crosshair';
         } else if (newMode === 'measure') {
             document.getElementById('btn-mode-measure').classList.add('active');
-            guideText.textContent = '[거리 측정] 길이를 잴 두 지점(시작점 → 끝점)을 클릭하세요. (Shift: 직각 스냅, 끝점 마커 드래그 수정 가능)';
-            liveTypeBadge.textContent = '거리 측정';
-            liveMainLabel.textContent = '실제 거리 (ΔL):';
+            guideText.textContent = t('guideMeasure');
+            liveTypeBadge.textContent = t('typeMeasure');
+            liveMainLabel.textContent = t('labelLiveDist');
             viewport.style.cursor = 'crosshair';
         } else if (newMode === 'area') {
             document.getElementById('btn-mode-area').classList.add('active-area');
-            guideText.textContent = '[면적·평수 측정] 방이나 사각형 영역의 대각선 모서리 두 점(시작 모서리 → 반대쪽 모서리)을 클릭하세요.';
-            liveTypeBadge.textContent = '면적·평수';
-            liveMainLabel.textContent = '면적 (㎡·평):';
+            guideText.textContent = t('guideArea');
+            liveTypeBadge.textContent = t('typeArea');
+            liveMainLabel.textContent = t('labelLiveArea');
             viewport.style.cursor = 'crosshair';
         } else if (newMode === 'poly') {
             document.getElementById('btn-mode-poly').classList.add('active-poly');
-            guideText.textContent = '[연속 구간 측정] 여러 지점을 순서대로 클릭하고, 끝내려면 [우클릭] 또는 [Enter]를 누르세요.';
-            liveTypeBadge.textContent = '연속 거리';
-            liveMainLabel.textContent = '누적 총길이:';
+            guideText.textContent = t('guidePoly');
+            liveTypeBadge.textContent = t('typePoly');
+            liveMainLabel.textContent = t('labelLivePoly');
             viewport.style.cursor = 'crosshair';
         } else if (newMode === 'angle') {
             document.getElementById('btn-mode-angle').classList.add('active');
-            guideText.textContent = '[각도 측정] 시작점(1) → 꼭짓점(2) → 끝점(3) 순서로 세 지점을 클릭하세요.';
-            liveTypeBadge.textContent = '각도 측정';
-            liveMainLabel.textContent = '측정 각도:';
+            guideText.textContent = t('guideAngle');
+            liveTypeBadge.textContent = t('typeAngle');
+            liveMainLabel.textContent = t('labelLiveAngleMain');
             viewport.style.cursor = 'crosshair';
         } else if (newMode === 'pan') {
             document.getElementById('btn-mode-pan').classList.add('active');
-            guideText.textContent = '[화면 이동 모드] 마우스를 드래그하여 도면 위치를 이동하고, 마우스 휠로 확대/축소하세요.';
-            liveTypeBadge.textContent = '화면 이동';
+            guideText.textContent = t('guidePan');
+            liveTypeBadge.textContent = t('typePan');
             viewport.style.cursor = 'grab';
         }
 
@@ -315,7 +661,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-mode-pan').addEventListener('click', () => setMode('pan'));
     document.getElementById('btn-recalibrate').addEventListener('click', () => {
         setMode('calibrate');
-        showToast('기준점 2점을 화면에서 클릭해 주세요.');
+        showToast(t('toastClickTwoRef'));
     });
 
     document.getElementById('select-unit').addEventListener('change', (e) => {
@@ -323,10 +669,9 @@ document.addEventListener('DOMContentLoaded', () => {
         recalculateScale();
     });
 
-    // --- 끝점 핸들 히트 테스트 (이미 찍은 점 마우스로 드래그 수정) ---
+    // --- 끝점 핸들 히트 테스트 ---
     function findHandleAtScreenPos(sx, sy) {
         const hitRadius = 9;
-        // 측정 항목들의 각 점 검사
         for (let i = state.measurements.length - 1; i >= 0; i--) {
             const m = state.measurements[i];
             for (let pIdx = 0; pIdx < m.points.length; pIdx++) {
@@ -336,7 +681,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-        // 기준선 양 끝점 검사
         if (state.calibLine) {
             const p1 = worldToScreen(state.calibLine.x1, state.calibLine.y1);
             if (Math.hypot(p1.x - sx, p1.y - sy) <= hitRadius) {
@@ -366,10 +710,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const height = viewport.clientHeight;
         ctx.clearRect(0, 0, width, height);
 
-        // 1. 배경 모눈 그리드
         drawGrid(width, height);
 
-        // 2. 배경 도면 이미지
         if (state.bgImage) {
             ctx.save();
             ctx.globalAlpha = state.bgOpacity;
@@ -379,15 +721,13 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.restore();
         }
 
-        // 3. 기준선(Calibration Line)
         if (state.calibLine) {
             const p1 = worldToScreen(state.calibLine.x1, state.calibLine.y1);
             const p2 = worldToScreen(state.calibLine.x2, state.calibLine.y2);
-            const label = `기준선: ${state.refRealValue}${state.refRealUnit} (${state.refPx.toFixed(1)}px)`;
+            const label = `${t('canvasRefLine')}: ${state.refRealValue}${state.refRealUnit} (${state.refPx.toFixed(1)}px)`;
             drawDimensionLineScreen(p1, p2, label, '#f59e0b', true);
         }
 
-        // 4. 저장된 측정 항목들 렌더링
         state.measurements.forEach((m, idx) => {
             const prefix = m.name ? `${m.name}: ` : `#${idx + 1} `;
             if (m.type === 'distance') {
@@ -409,7 +749,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 for (let i = 1; i < m.points.length; i++) {
                     totalPx += Math.hypot(m.points[i].x - m.points[i - 1].x, m.points[i].y - m.points[i - 1].y);
                 }
-                drawPolylineScreen(screenPts, `${prefix}총 ${formatWorldDistance(totalPx)}`, '#06b6d4', false);
+                drawPolylineScreen(screenPts, `${prefix}${t('canvasTotal')} ${formatWorldDistance(totalPx)}`, '#06b6d4', false);
             } else if (m.type === 'angle') {
                 const p1 = worldToScreen(m.points[0].x, m.points[0].y);
                 const vertex = worldToScreen(m.points[1].x, m.points[1].y);
@@ -419,7 +759,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // 5. 호버 중인 끝점 하이라이트 링 표시
         if (state.hoveredHandle && state.tempPoints.length === 0) {
             let hPt = null;
             if (state.hoveredHandle.target === 'measurement') {
@@ -441,7 +780,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // 6. 현재 클릭 진행 중인 임시 도형 그리기
         if (state.tempPoints.length > 0) {
             const lastPt = state.tempPoints[state.tempPoints.length - 1];
             const snappedWorld = applyOrthoSnap(lastPt, state.mouseWorld);
@@ -452,13 +790,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const distPx = Math.hypot(snappedWorld.x - state.tempPoints[0].x, snappedWorld.y - state.tempPoints[0].y);
                 const color = state.mode === 'calibrate' ? '#fbbf24' : '#34d399';
                 const label = state.mode === 'calibrate'
-                    ? `기준 구간: ${distPx.toFixed(1)} px (클릭하여 수치 입력)`
+                    ? `${t('canvasRefTemp')}: ${distPx.toFixed(1)} px (${t('canvasClickToInput')})`
                     : `${formatWorldDistance(distPx)} (${distPx.toFixed(1)}px)`;
                 drawDimensionLineScreen(p1, p2, label, color, true);
                 updateLiveReadout(state.tempPoints[0], snappedWorld, 'distance');
             } else if (state.mode === 'area') {
                 const p1 = worldToScreen(state.tempPoints[0].x, state.tempPoints[0].y);
-                const p2 = worldToScreen( state.mouseWorld.x, state.mouseWorld.y );
+                const p2 = worldToScreen(state.mouseWorld.x, state.mouseWorld.y);
                 const wPx = Math.abs(state.mouseWorld.x - state.tempPoints[0].x);
                 const hPx = Math.abs(state.mouseWorld.y - state.tempPoints[0].y);
                 const areaInfo = formatArea(wPx, hPx);
@@ -471,13 +809,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 for (let i = 1; i < allWorld.length; i++) {
                     totalPx += Math.hypot(allWorld[i].x - allWorld[i - 1].x, allWorld[i].y - allWorld[i - 1].y);
                 }
-                drawPolylineScreen(screenPts, `누적: ${formatWorldDistance(totalPx)} (우클릭 완료)`, '#22d3ee', true);
+                drawPolylineScreen(screenPts, `${t('canvasCumul')}: ${formatWorldDistance(totalPx)} (${t('canvasRightClickDone')})`, '#22d3ee', true);
                 updateLiveReadout(lastPt, snappedWorld, 'distance', totalPx);
             } else if (state.mode === 'angle') {
                 if (state.tempPoints.length === 1) {
                     const p1 = worldToScreen(state.tempPoints[0].x, state.tempPoints[0].y);
                     const p2 = worldToScreen(snappedWorld.x, snappedWorld.y);
-                    drawDimensionLineScreen(p1, p2, '꼭짓점 클릭', '#c084fc', true);
+                    drawDimensionLineScreen(p1, p2, t('canvasClickVertex'), '#c084fc', true);
                 } else if (state.tempPoints.length === 2) {
                     const p1 = worldToScreen(state.tempPoints[0].x, state.tempPoints[0].y);
                     const v = worldToScreen(state.tempPoints[1].x, state.tempPoints[1].y);
@@ -513,7 +851,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.stroke();
     }
 
-    // CAD 스타일 치수선 그리기
     function drawDimensionLineScreen(p1, p2, text, color, isDashed) {
         ctx.save();
         const dx = p2.x - p1.x;
@@ -557,7 +894,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.restore();
     }
 
-    // 사각형 면적(㎡·평) 렌더링
     function drawAreaRectScreen(p1, p2, mainLabel, widthLabel, heightLabel, color, isDashed = false) {
         ctx.save();
         const x = Math.min(p1.x, p2.x);
@@ -586,13 +922,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (w > 20 && h > 20) {
             drawPillBadge(x + w / 2, y + h / 2, mainLabel, color);
-            drawPillBadge(x + w / 2, y - 12, `가로 ${widthLabel}`, '#34d399');
-            drawPillBadge(x + w + 42, y + h / 2, `세로 ${heightLabel}`, '#34d399');
+            drawPillBadge(x + w / 2, y - 12, `${t('canvasWidth')} ${widthLabel}`, '#34d399');
+            drawPillBadge(x + w + 42, y + h / 2, `${t('canvasHeight')} ${heightLabel}`, '#34d399');
         }
         ctx.restore();
     }
 
-    // 연속 구간(Polyline) 렌더링
     function drawPolylineScreen(pts, label, color, isDashed = false) {
         if (pts.length < 2) return;
         ctx.save();
@@ -687,7 +1022,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.restore();
     }
 
-    // 실시간 우측 사이드바 수치 갱신
     function updateLiveReadout(ptA, ptB, modeType = 'distance', overrideTotalPx = null) {
         const dxPx = Math.abs(ptB.x - ptA.x);
         const dyPx = Math.abs(ptB.y - ptA.y);
@@ -700,7 +1034,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('live-dx').textContent = formatWorldDistance(dxPx);
             document.getElementById('live-dy').textContent = formatWorldDistance(dyPx);
             document.getElementById('live-px').textContent = `${Math.round(dxPx)}×${Math.round(dyPx)} px`;
-            document.getElementById('live-angle').textContent = areaInfo.pyeong;
+            document.getElementById('live-angle').textContent = areaInfo.extra;
         } else {
             document.getElementById('live-dist').textContent = formatWorldDistance(distPx);
             document.getElementById('live-dx').textContent = formatWorldDistance(dxPx);
@@ -710,7 +1044,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- 정밀 돋보기 (Loupe) 렌더링 ---
+    // --- 정밀 돋보기 (Loupe) ---
     function renderLoupe() {
         const size = 128;
         const zoomFactor = state.loupeZoom;
@@ -737,7 +1071,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderLoupe();
     });
 
-    // --- 포인터 / 마우스 / 터치 통합 이벤트 처리 ---
+    // --- 포인터 / 마우스 / 터치 이벤트 ---
     function getCanvasPos(clientX, clientY) {
         const rect = mainCanvas.getBoundingClientRect();
         return {
@@ -751,7 +1085,6 @@ document.addEventListener('DOMContentLoaded', () => {
         state.mouseScreen = { x: sx, y: sy };
         state.mouseWorld = screenToWorld(sx, sy);
 
-        // 1. 마우스 휠 클릭 또는 스페이스바+클릭 또는 Pan 모드일 때 화면 이동
         if (e.button === 1 || state.isSpaceDown || state.mode === 'pan') {
             e.preventDefault();
             state.isPanning = true;
@@ -761,7 +1094,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // 2. 우클릭 시: 연속거리(poly) 모드면 완료, 아니면 취소
         if (e.button === 2) {
             if (state.mode === 'poly' && state.tempPoints.length >= 2) {
                 finishPolyline();
@@ -775,7 +1107,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (e.button !== 0) return;
 
-        // 3. 임시 찍는 점이 없을 때 기존 끝점 마커를 클릭했으면 드래그 수정 시작
         if (state.tempPoints.length === 0) {
             const hit = findHandleAtScreenPos(sx, sy);
             if (hit) {
@@ -790,7 +1121,6 @@ document.addEventListener('DOMContentLoaded', () => {
             worldPt = applyOrthoSnap(state.tempPoints[state.tempPoints.length - 1], worldPt);
         }
 
-        // 4. 모드별 점 추가
         if (state.mode === 'calibrate') {
             state.tempPoints.push(worldPt);
             if (state.tempPoints.length === 2) {
@@ -798,7 +1128,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const p2 = state.tempPoints[1];
                 const distPx = Math.hypot(p2.x - p1.x, p2.y - p1.y);
                 if (distPx < 1) {
-                    showToast('두 지점이 너무 가깝습니다. 다시 클릭해 주세요.');
+                    showToast(t('toastTwoPointsClose'));
                     state.tempPoints = [];
                     return;
                 }
@@ -862,7 +1192,6 @@ document.addEventListener('DOMContentLoaded', () => {
         renderLoupe();
     });
 
-    // 더블클릭으로 연속거리(poly) 완료
     mainCanvas.addEventListener('dblclick', () => {
         if (state.mode === 'poly' && state.tempPoints.length >= 2) {
             finishPolyline();
@@ -878,7 +1207,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: ''
             });
             renderMeasurementList();
-            showToast('연속 구간 거리 측정이 저장되었습니다.');
+            showToast(t('toastPolySaved'));
         }
         state.tempPoints = [];
         renderMainCanvas();
@@ -901,7 +1230,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // 끝점 마커 드래그 수정 중일 때
         if (state.draggingHandle) {
             const dh = state.draggingHandle;
             if (dh.target === 'measurement') {
@@ -931,7 +1259,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // 호버 중인 끝점 마커 감지
         if (state.tempPoints.length === 0 && !state.isSpaceDown && state.mode !== 'pan') {
             state.hoveredHandle = findHandleAtScreenPos(sx, sy);
             viewport.style.cursor = state.hoveredHandle ? 'move' : 'crosshair';
@@ -954,7 +1281,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     mainCanvas.addEventListener('contextmenu', (e) => e.preventDefault());
 
-    // 마우스 휠 확대/축소
     mainCanvas.addEventListener('wheel', (e) => {
         e.preventDefault();
         const zoomFactor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
@@ -993,7 +1319,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- 실행 취소 (Undo) ---
     function undoLastAction() {
         if (state.tempPoints.length > 0) {
             state.tempPoints.pop();
@@ -1004,12 +1329,12 @@ document.addEventListener('DOMContentLoaded', () => {
             state.measurements.pop();
             renderMeasurementList();
             renderMainCanvas();
-            showToast('마지막 측정 항목이 취소되었습니다.');
+            showToast(t('toastUndo'));
         }
     }
     document.getElementById('btn-undo').addEventListener('click', undoLastAction);
 
-    // --- 기준점 2점 클릭 팝업 처리 ---
+    // --- 기준점 2점 클릭 팝업 ---
     function openCalibrationPopup(screenX, screenY, distPx) {
         calibPopupPx.textContent = `${distPx.toFixed(1)} px`;
         selectCalibUnit.value = state.displayUnit === 'px' ? 'mm' : state.displayUnit;
@@ -1033,7 +1358,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const val = parseFloat(inputCalibValue.value);
         const unit = selectCalibUnit.value;
         if (!val || val <= 0) {
-            showToast('0보다 큰 실제 수치를 입력해 주세요.');
+            showToast(t('toastEnterPositive'));
             return;
         }
         state.refRealValue = val;
@@ -1044,7 +1369,7 @@ document.addEventListener('DOMContentLoaded', () => {
         calibPopup.classList.add('hidden');
         recalculateScale();
         setMode('measure');
-        showToast(`배율 보정 완료! (${state.refPx.toFixed(1)}px = ${val}${unit}) 이제 자유롭게 측정하세요.`);
+        showToast(t('toastCalibDone'));
     }
 
     document.getElementById('btn-apply-calib-popup').addEventListener('click', confirmCalibrationPopup);
@@ -1063,64 +1388,61 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 신용카드 / 모니터 인치 1:1 실물 크기 보정 모달 ---
-    const modalCardCalib = document.getElementById('modal-card-calib');
-    const sliderCardPx = document.getElementById('slider-card-px');
-    const cardPreviewBox = document.getElementById('card-preview-box');
-    const cardPxLabel = document.getElementById('card-px-label');
+    // --- 모니터 인치 / 10cm 기준 1:1 실물 크기 보정 모달 ---
+    const modalDpiCalib = document.getElementById('modal-dpi-calib');
+    const sliderDpiPx = document.getElementById('slider-dpi-px');
+    const dpiPreviewBar = document.getElementById('dpi-preview-bar');
+    const dpiPxLabel = document.getElementById('dpi-px-label');
 
-    function updateCardPreview(pxWidth) {
-        const ratio = 53.98 / 85.60;
-        const pxHeight = Math.round(pxWidth * ratio);
-        cardPreviewBox.style.width = `${pxWidth}px`;
-        cardPreviewBox.style.height = `${pxHeight}px`;
-        const dpi = (pxWidth / (85.60 / 25.4)).toFixed(1);
-        cardPxLabel.textContent = `${pxWidth} px = 85.60 mm (${dpi} DPI)`;
+    function updateDpiPreview(pxWidth) {
+        dpiPreviewBar.style.width = `${pxWidth}px`;
+        const dpi = (pxWidth / (100.0 / 25.4)).toFixed(1);
+        dpiPxLabel.textContent = `${pxWidth} px = 100.0 mm (${dpi} DPI)`;
     }
 
-    function openCardCalibModal() {
-        modalCardCalib.classList.remove('hidden');
-        modalCardCalib.classList.add('flex');
-        const currentCardPx = Math.max(180, Math.min(600, Math.round(85.60 / state.mmPerPixel)));
-        sliderCardPx.value = currentCardPx;
-        updateCardPreview(currentCardPx);
+    function openDpiCalibModal() {
+        modalDpiCalib.classList.remove('hidden');
+        modalDpiCalib.classList.add('flex');
+        const current100mmPx = Math.max(200, Math.min(700, Math.round(100.0 / state.mmPerPixel)));
+        sliderDpiPx.value = current100mmPx;
+        updateDpiPreview(current100mmPx);
     }
 
-    document.getElementById('btn-open-card-calib').addEventListener('click', openCardCalibModal);
-    document.getElementById('btn-welcome-card').addEventListener('click', openCardCalibModal);
-    document.getElementById('btn-close-card-modal').addEventListener('click', () => {
-        modalCardCalib.classList.add('hidden');
-        modalCardCalib.classList.remove('flex');
+    document.getElementById('btn-open-dpi-calib').addEventListener('click', openDpiCalibModal);
+    document.getElementById('btn-welcome-dpi').addEventListener('click', openDpiCalibModal);
+    document.getElementById('btn-close-dpi-modal').addEventListener('click', () => {
+        modalDpiCalib.classList.add('hidden');
+        modalDpiCalib.classList.remove('flex');
     });
 
-    sliderCardPx.addEventListener('input', (e) => {
-        updateCardPreview(parseInt(e.target.value, 10));
+    sliderDpiPx.addEventListener('input', (e) => {
+        updateDpiPreview(parseInt(e.target.value, 10));
     });
 
     document.querySelectorAll('.monitor-preset-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const ppi = parseFloat(btn.dataset.ppi);
-            const cardPx = Math.round((85.60 / 25.4) * ppi);
-            sliderCardPx.value = cardPx;
-            updateCardPreview(cardPx);
+            const barPx = Math.round((100.0 / 25.4) * ppi);
+            sliderDpiPx.value = barPx;
+            updateDpiPreview(barPx);
         });
     });
 
-    document.getElementById('btn-apply-card-calib').addEventListener('click', () => {
-        const px = parseFloat(sliderCardPx.value);
+    document.getElementById('btn-apply-dpi-calib').addEventListener('click', () => {
+        const px = parseFloat(sliderDpiPx.value);
         state.refPx = px;
-        state.refRealValue = 85.6;
+        state.refRealValue = 100;
         state.refRealUnit = 'mm';
         state.displayUnit = 'mm';
         state.calibLine = null;
         document.getElementById('select-unit').value = 'mm';
-        modalCardCalib.classList.add('hidden');
-        modalCardCalib.classList.remove('flex');
+        modalDpiCalib.classList.add('hidden');
+        modalDpiCalib.classList.remove('flex');
         recalculateScale();
-        showToast('모니터 1:1 실물 크기(신용카드 85.6mm 기준) 보정이 적용되었습니다!');
+        showToast(t('toastDpiDone'));
     });
 
-    // --- 우측 측정 목록 렌더링 및 이름 수정/복사/삭제 ---
+    // --- 우측 측정 목록 렌더링 ---
     function getMeasurementSummary(m, index) {
         const labelPrefix = m.name ? m.name : `#${index + 1}`;
         if (m.type === 'distance') {
@@ -1129,9 +1451,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const distPx = Math.hypot(dx, dy);
             return {
                 badge: labelPrefix,
-                typeStr: '거리',
+                typeStr: t('typeMeasure'),
                 title: formatWorldDistance(distPx),
-                sub: `가로 ${formatWorldDistance(dx)} · 세로 ${formatWorldDistance(dy)} (${distPx.toFixed(1)}px)`,
+                sub: `${t('canvasWidth')} ${formatWorldDistance(dx)} · ${t('canvasHeight')} ${formatWorldDistance(dy)} (${distPx.toFixed(1)}px)`,
                 rawPx: distPx.toFixed(1)
             };
         } else if (m.type === 'area') {
@@ -1140,7 +1462,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const areaInfo = formatArea(dx, dy);
             return {
                 badge: labelPrefix,
-                typeStr: '면적',
+                typeStr: t('typeArea'),
                 title: areaInfo.main,
                 sub: areaInfo.sub,
                 rawPx: `${Math.round(dx)}x${Math.round(dy)}`
@@ -1152,18 +1474,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             return {
                 badge: labelPrefix,
-                typeStr: '연속거리',
-                title: `총 ${formatWorldDistance(totalPx)}`,
-                sub: `${m.points.length - 1}개 구간 합계 (${totalPx.toFixed(1)}px)`,
+                typeStr: t('typePoly'),
+                title: `${t('canvasTotal')} ${formatWorldDistance(totalPx)}`,
+                sub: `${m.points.length - 1} seg (${totalPx.toFixed(1)}px)`,
                 rawPx: totalPx.toFixed(1)
             };
         } else {
             const deg = calculateAngleDeg(m.points[0], m.points[1], m.points[2]);
             return {
                 badge: labelPrefix,
-                typeStr: '각도',
+                typeStr: t('typeAngle'),
                 title: `${deg.toFixed(1)}°`,
-                sub: `3점 각도 측정`,
+                sub: `3-Pt Angle`,
                 rawPx: '-'
             };
         }
@@ -1175,12 +1497,7 @@ document.addEventListener('DOMContentLoaded', () => {
         countEl.textContent = state.measurements.length;
 
         if (state.measurements.length === 0) {
-            listEl.innerHTML = `
-                <div class="text-center text-slate-500 py-6 text-xs leading-relaxed">
-                    아직 측정된 치수선이 없습니다.<br>
-                    화면에서 지점을 클릭하면 치수 기록이 저장되며,<br>
-                    <strong>이름을 클릭해 메모</strong>를 남길 수 있습니다.
-                </div>`;
+            listEl.innerHTML = `<div class="text-center text-slate-500 py-6 text-xs leading-relaxed">${t('emptyListMsg')}</div>`;
             return;
         }
 
@@ -1193,7 +1510,7 @@ document.addEventListener('DOMContentLoaded', () => {
             card.innerHTML = `
                 <div class="min-w-0 pr-2 flex-1">
                     <div class="flex items-center gap-1.5">
-                        <button data-idx="${index}" class="btn-rename-item text-[10px] font-mono-num px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-sky-400 font-bold cursor-pointer" title="클릭하여 이름(메모) 변경">
+                        <button data-idx="${index}" class="btn-rename-item text-[10px] font-mono-num px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-sky-400 font-bold cursor-pointer" title="Rename">
                             ✏️ ${info.badge}
                         </button>
                         <span class="font-mono-num font-bold text-xs sm:text-sm text-amber-300 truncate">${info.title}</span>
@@ -1201,10 +1518,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="text-[10px] font-mono-num text-slate-400 mt-1 truncate">${info.sub}</div>
                 </div>
                 <div class="flex items-center gap-1 shrink-0">
-                    <button data-copy="${info.badge}: ${info.title}" class="btn-copy-item p-1.5 text-slate-400 hover:text-white bg-slate-900 hover:bg-slate-800 rounded-lg cursor-pointer" title="수치 복사">
+                    <button data-copy="${info.badge}: ${info.title}" class="btn-copy-item p-1.5 text-slate-400 hover:text-white bg-slate-900 hover:bg-slate-800 rounded-lg cursor-pointer" title="Copy">
                         📋
                     </button>
-                    <button data-idx="${index}" class="btn-del-item p-1.5 text-slate-400 hover:text-rose-400 bg-slate-900 hover:bg-slate-800 rounded-lg cursor-pointer" title="삭제">
+                    <button data-idx="${index}" class="btn-del-item p-1.5 text-slate-400 hover:text-rose-400 bg-slate-900 hover:bg-slate-800 rounded-lg cursor-pointer" title="Delete">
                         ✕
                     </button>
                 </div>
@@ -1216,7 +1533,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.addEventListener('click', () => {
                 const idx = parseInt(btn.dataset.idx, 10);
                 const currentName = state.measurements[idx].name || `#${idx + 1}`;
-                const newName = prompt('이 측정 항목의 이름(예: 안방 가로, 책상 길이)을 입력하세요:', currentName);
+                const newName = prompt(t('promptRename'), currentName);
                 if (newName !== null) {
                     state.measurements[idx].name = newName.trim();
                     renderMeasurementList();
@@ -1228,7 +1545,7 @@ document.addEventListener('DOMContentLoaded', () => {
         listEl.querySelectorAll('.btn-copy-item').forEach(btn => {
             btn.addEventListener('click', () => {
                 navigator.clipboard?.writeText(btn.dataset.copy);
-                showToast(`복사됨: ${btn.dataset.copy}`);
+                showToast(`${t('toastCopiedItem')} ${btn.dataset.copy}`);
             });
         });
 
@@ -1247,13 +1564,12 @@ document.addEventListener('DOMContentLoaded', () => {
         state.measurements = [];
         renderMeasurementList();
         renderMainCanvas();
-        showToast('모든 측정 기록이 비워졌습니다.');
+        showToast(t('toastCleared'));
     });
 
-    // 전체 텍스트 복사 및 엑셀(CSV) 내보내기
     document.getElementById('btn-copy-all').addEventListener('click', () => {
         if (state.measurements.length === 0) {
-            showToast('복사할 측정 기록이 없습니다.');
+            showToast(t('toastNoCopy'));
             return;
         }
         const lines = state.measurements.map((m, i) => {
@@ -1261,15 +1577,18 @@ document.addEventListener('DOMContentLoaded', () => {
             return `${info.badge} [${info.typeStr}] : ${info.title} (${info.sub})`;
         });
         navigator.clipboard?.writeText(lines.join('\n'));
-        showToast('전체 측정 목록이 클립보드에 복사되었습니다!');
+        showToast(t('toastCopiedAll'));
     });
 
     document.getElementById('btn-export-csv').addEventListener('click', () => {
         if (state.measurements.length === 0) {
-            showToast('저장할 측정 기록이 없습니다.');
+            showToast(t('toastNoCsv'));
             return;
         }
-        const rows = [['번호', '이름', '측정유형', '측정결과', '상세내역', '원본픽셀']];
+        const headers = state.lang === 'en'
+            ? ['No', 'Label', 'Type', 'Result', 'Details', 'Pixels']
+            : ['번호', '이름', '측정유형', '측정결과', '상세내역', '원본픽셀'];
+        const rows = [headers];
         state.measurements.forEach((m, i) => {
             const info = getMeasurementSummary(m, i);
             rows.push([
@@ -1287,10 +1606,9 @@ document.addEventListener('DOMContentLoaded', () => {
         link.href = URL.createObjectURL(blob);
         link.download = `scaleruler-measurements-${new Date().toISOString().slice(0, 10)}.csv`;
         link.click();
-        showToast('엑셀(CSV) 파일이 다운로드되었습니다.');
+        showToast(t('toastCsvSaved'));
     });
 
-    // --- 치수 포함 이미지 저장 (PNG Export) ---
     document.getElementById('btn-export-png').addEventListener('click', () => {
         const exportCanvas = document.createElement('canvas');
         const dpr = window.devicePixelRatio || 1;
@@ -1298,15 +1616,12 @@ document.addEventListener('DOMContentLoaded', () => {
         exportCanvas.height = mainCanvas.height;
         const eCtx = exportCanvas.getContext('2d');
 
-        // 배경색 채우기
         const isLight = document.documentElement.classList.contains('light-mode');
         eCtx.fillStyle = isLight ? '#f8fafc' : '#020617';
         eCtx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
 
-        // 현재 메인 캔버스 복사
         eCtx.drawImage(mainCanvas, 0, 0);
 
-        // 좌측 하단 배율 정보 워터마크 스탬프
         eCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
         const stampText = `ScaleRuler Pro · ${document.getElementById('badge-scale-status').textContent}`;
         eCtx.font = 'bold 11px "JetBrains Mono", "Noto Sans KR", sans-serif';
@@ -1321,10 +1636,10 @@ document.addEventListener('DOMContentLoaded', () => {
         link.href = exportCanvas.toDataURL('image/png');
         link.download = `scaleruler-result-${new Date().toISOString().slice(0, 10)}.png`;
         link.click();
-        showToast('치수선이 포함된 이미지가 PNG로 저장되었습니다!');
+        showToast(t('toastPngSaved'));
     });
 
-    // --- 배율 연동 반투명 플로팅 눈금자 (Floating Screen Ruler) ---
+    // --- 플로팅 눈금자 ---
     function updateFloatingRuler() {
         if (!state.rulerVisible) {
             floatingRuler.classList.add('hidden');
@@ -1425,7 +1740,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // 눈금자 위 P1 / P2 핀 그리기
         if (state.rulerPins.length > 0) {
             state.rulerPins.forEach((pinWorldPx, idx) => {
                 const pinScreenPos = pinWorldPx * state.zoom;
@@ -1447,15 +1761,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (state.rulerPins.length === 2) {
             const deltaWorldPx = Math.abs(state.rulerPins[1] - state.rulerPins[0]);
-            rulerScaleLabel.textContent = `📌 핀 거리(Δ): ${formatWorldDistance(deltaWorldPx)} (전체 ${formatWorldDistance(state.rulerLength / state.zoom)})`;
+            rulerScaleLabel.textContent = `${t('rulerPinDelta')} ${formatWorldDistance(deltaWorldPx)} (${t('rulerTotal')} ${formatWorldDistance(state.rulerLength / state.zoom)})`;
             btnRulerPinClear.classList.remove('hidden');
         } else {
-            rulerScaleLabel.textContent = `배율 연동 눈금자 (${state.displayUnit}) · 전체 ${formatWorldDistance(state.rulerLength / state.zoom)}`;
+            rulerScaleLabel.textContent = `${t('rulerLabelPrefix')} (${state.displayUnit}) · ${t('rulerTotal')} ${formatWorldDistance(state.rulerLength / state.zoom)}`;
             btnRulerPinClear.classList.toggle('hidden', state.rulerPins.length === 0);
         }
     }
 
-    // 눈금자 이동 / 리사이즈 / 클릭 핀 고정
     let rulerAction = null;
     let rStartX = 0, rStartY = 0, rInitX = 0, rInitY = 0, rInitLen = 0;
     let rulerDragged = false;
@@ -1496,7 +1809,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('pointerup', (e) => {
         if (rulerAction === 'move' && !rulerDragged) {
-            // 드래그하지 않고 단순 클릭한 경우 눈금자 위에 P1/P2 핀 고정
             const rect = floatingRuler.getBoundingClientRect();
             const isHoriz = state.rulerOrientation === 'horizontal';
             const screenOffset = Math.max(0, Math.min(state.rulerLength, isHoriz ? (e.clientX - rect.left) : (e.clientY - rect.top)));
@@ -1592,7 +1904,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalDirect.classList.add('hidden');
             modalDirect.classList.remove('flex');
             recalculateScale();
-            showToast(`직접 배율 설정 완료 (${px}px = ${real}${unit})`);
+            showToast(t('toastDirectDone'));
         }
     });
 
@@ -1621,7 +1933,7 @@ document.addEventListener('DOMContentLoaded', () => {
             fitImageToViewport(img);
 
             if (!isSample) {
-                showToast('사진이 로드되었습니다! (서버로 전송되지 않고 내 브라우저에서만 안전하게 열렸습니다)');
+                showToast(t('toastImgLoaded'));
             }
         };
         img.src = src;
@@ -1637,32 +1949,26 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('bg-opacity-control').classList.add('hidden');
         document.getElementById('bg-opacity-control').classList.remove('flex');
         renderMainCanvas();
-        showToast('배경 이미지가 제거되었습니다.');
+        showToast(t('toastBgRemoved'));
     });
 
     document.getElementById('btn-close-welcome').addEventListener('click', () => {
         document.getElementById('welcome-overlay').classList.add('hidden');
     });
 
-    // 샘플 아파트 평면도 생성 및 즉시 체험
     function loadSampleFloorplan() {
         const c = document.createElement('canvas');
         c.width = 920;
         c.height = 620;
         const g = c.getContext('2d');
 
-        // 도면 배경
         g.fillStyle = '#0f172a';
         g.fillRect(0, 0, c.width, c.height);
 
-        // 도면 용지 테두리
         g.strokeStyle = '#334155';
         g.lineWidth = 2;
         g.strokeRect(24, 24, c.width - 48, c.height - 48);
 
-        // 외벽 및 내벽 (기준: 100px = 1000mm -> 1px = 10mm)
-        // 거실 (420px x 360px = 4200mm x 3600mm)
-        // 안방 (360px x 360px = 3600mm x 3600mm)
         g.fillStyle = '#1e293b';
         g.fillRect(80, 110, 780, 420);
 
@@ -1670,7 +1976,6 @@ document.addEventListener('DOMContentLoaded', () => {
         g.lineWidth = 6;
         g.strokeRect(80, 110, 780, 420);
 
-        // 중앙 내벽 분리선 (거실 420px | 안방 360px)
         g.beginPath();
         g.moveTo(500, 110);
         g.lineTo(500, 530);
@@ -1678,30 +1983,28 @@ document.addEventListener('DOMContentLoaded', () => {
         g.lineTo(500, 350);
         g.stroke();
 
-        // 방 이름 및 가이드 텍스트
         g.fillStyle = '#94a3b8';
         g.font = 'bold 20px "Noto Sans KR", sans-serif';
         g.textAlign = 'center';
         g.fillText('거실 (Living Room)', 290, 225);
         g.font = '14px "JetBrains Mono", monospace';
         g.fillStyle = '#64748b';
-        g.fillText('설계 치수: 4200 × 2400 mm', 290, 252);
+        g.fillText('4200 × 2400 mm', 290, 252);
 
         g.fillStyle = '#94a3b8';
         g.font = 'bold 20px "Noto Sans KR", sans-serif';
         g.fillText('안방 (Master Bedroom)', 680, 305);
         g.font = '14px "JetBrains Mono", monospace';
         g.fillStyle = '#64748b';
-        g.fillText('설계 치수: 3600 × 4200 mm', 680, 332);
+        g.fillText('3600 × 4200 mm', 680, 332);
 
         g.fillStyle = '#94a3b8';
         g.font = 'bold 18px "Noto Sans KR", sans-serif';
         g.fillText('주방 / 다이닝 (Kitchen)', 290, 435);
         g.font = '13px "JetBrains Mono", monospace';
         g.fillStyle = '#64748b';
-        g.fillText('설계 치수: 4200 × 1800 mm', 290, 460);
+        g.fillText('4200 × 1800 mm', 290, 460);
 
-        // 상단 도면 표기 치수선 예시 (80, 75) ~ (500, 75) -> 420px = 4200mm
         g.strokeStyle = '#fbbf24';
         g.lineWidth = 1.5;
         g.beginPath();
@@ -1715,9 +2018,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         g.fillStyle = '#fbbf24';
         g.font = 'bold 14px "JetBrains Mono", sans-serif';
-        g.fillText('◀ 도면 표기 기준 치수: 4200 mm ▶', 290, 62);
+        g.fillText('◀ Reference Dimension: 4200 mm ▶', 290, 62);
 
-        // 우측 하단 타이틀 블록
         g.fillStyle = '#475569';
         g.font = '12px "JetBrains Mono", sans-serif';
         g.textAlign = 'right';
@@ -1725,7 +2027,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         loadImageFromSrc(c.toDataURL('image/png'), true);
 
-        // 샘플 기준선과 예시 측정값 자동 세팅
         state.calibLine = { x1: 80, y1: 80, x2: 500, y2: 80 };
         state.refPx = 420;
         state.refRealValue = 4200;
@@ -1738,19 +2039,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 id: state.nextId++,
                 type: 'distance',
                 points: [{ x: 500, y: 110 }, { x: 860, y: 110 }],
-                name: '안방 가로폭'
+                name: t('sampleBedroomWidth')
             },
             {
                 id: state.nextId++,
                 type: 'area',
                 points: [{ x: 500, y: 110 }, { x: 860, y: 530 }],
-                name: '안방 면적'
+                name: t('sampleBedroomArea')
             }
         ];
 
         recalculateScale();
         setMode('measure');
-        showToast('샘플 평면도가 로드되었습니다! (기준 4200mm 보정 완료 · 직접 다른 곳도 클릭해 보세요)');
+        showToast(t('toastSampleLoaded'));
     }
 
     document.getElementById('btn-load-sample').addEventListener('click', loadSampleFloorplan);
@@ -1789,7 +2090,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- 테마 전환 및 모바일 사이드바 토글 ---
     document.getElementById('btn-theme-toggle').addEventListener('click', () => {
         const isLight = document.documentElement.classList.toggle('light-mode');
         try { localStorage.setItem('sr_theme', isLight ? 'light' : 'dark'); } catch (e) {}
@@ -1852,7 +2152,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('resize', resizeMainCanvas);
 
-    // --- 정보 모달 (보안 안내 / 쿠키 정책 / 수익화 가이드) ---
+    // --- 보안 및 쿠키 안내 모달 (한국어 / 영어 자동 전환) ---
     const modalInfo = document.getElementById('modal-info');
     const modalInfoTitle = document.getElementById('modal-info-title');
     const modalInfoBody = document.getElementById('modal-info-body');
@@ -1872,117 +2172,106 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-close-info-modal').addEventListener('click', closeInfoModal);
     document.getElementById('btn-ok-info-modal').addEventListener('click', closeInfoModal);
 
-    // 1. 사진 비저장 보안 원리 안내 모달
-    const securityHtml = `
-        <div class="bg-emerald-950/60 border border-emerald-500/40 rounded-xl p-4 text-emerald-200 space-y-2">
-            <div class="font-extrabold text-sm">🔒 결론부터 말씀드리면: 업로드하신 사진은 서버에 절대 전송되거나 저장되지 않습니다!</div>
-            <p>이 웹사이트에 올리신 도면, 사진, 캡처 화면은 인터넷을 통해 어디로도 전송되지 않으며, <strong>오직 현재 보고 계신 사용자의 컴퓨터·스마트폰 브라우저 메모리(RAM) 안에서만</strong> 열립니다.</p>
-        </div>
-        <h4 class="font-bold text-white text-xs pt-2">1. 기술적 동작 원리 (100% Client-Side Processing)</h4>
-        <ul class="list-disc list-inside space-y-1.5 text-slate-300">
-            <li>일반적인 파일 업로드 사이트는 파일을 서버(<code class="text-amber-300">POST /upload</code>)로 전송하지만, ScaleRuler Pro에는 <strong>서버 전송 코드 자체가 존재하지 않습니다.</strong></li>
-            <li>웹 브라우저 내장 <code class="text-amber-300">FileReader.readAsDataURL()</code> 및 <code class="text-amber-300">HTML5 Canvas</code> API만을 사용해 내 컴퓨터 안에서 즉시 이미지를 화면에 그립니다.</li>
-            <li>심지어 인터넷 랜선(와이파이)을 뽑은 오프라인 상태에서도 사진 불러오기와 치수 측정이 완벽하게 작동합니다.</li>
-        </ul>
-        <h4 class="font-bold text-white text-xs pt-2">2. 창을 닫으면 사진은 어떻게 되나요?</h4>
-        <p>브라우저 탭을 닫거나 새로고침(<kbd class="px-1.5 py-0.5 bg-slate-800 rounded">F5</kbd>)하는 즉시 브라우저 메모리(RAM)에서 사진 데이터가 완전히 소멸됩니다. 사이트 운영자나 제3자는 사용자가 어떤 사진을 열었는지 절대 알 수 없으므로, <strong>회사 기밀 설계 도면, 부동산 계약 평면도, 개인 신분증/사진</strong>도 100% 안심하고 측정하실 수 있습니다.</p>
-    `;
+    function showSecurityModal() {
+        if (state.lang === 'en') {
+            openInfoModal('🛡️ 100% Local Privacy & Image Security Guarantee', `
+                <div class="bg-emerald-950/60 border border-emerald-500/40 rounded-xl p-4 text-emerald-200 space-y-2">
+                    <div class="font-extrabold text-sm">🔒 Your uploaded images and blueprints are NEVER sent to any server!</div>
+                    <p>Every image you open or paste (<kbd class="px-1.5 py-0.5 bg-slate-800 rounded">Ctrl+V</kbd>) is processed strictly inside your own device's web browser memory (RAM).</p>
+                </div>
+                <h4 class="font-bold text-white text-xs pt-2">1. How It Works (100% Client-Side Processing)</h4>
+                <ul class="list-disc list-inside space-y-1.5 text-slate-300">
+                    <li>Unlike traditional web tools that upload files to a remote server, ScaleRuler Pro has <strong>zero file upload network requests</strong>.</li>
+                    <li>It uses standard browser <code class="text-amber-300">FileReader.readAsDataURL()</code> and <code class="text-amber-300">HTML5 Canvas</code> APIs locally on your computer or phone.</li>
+                </ul>
+                <h4 class="font-bold text-white text-xs pt-2">2. Instant Erasure</h4>
+                <p>When you close the browser tab or refresh the page, the image data in your browser memory is immediately destroyed. Confidential CAD drawings, floorplans, and personal photos remain 100% private.</p>
+            `);
+        } else {
+            openInfoModal('🛡️ 업로드 사진 처리 방식 및 개인정보 보안 안내', `
+                <div class="bg-emerald-950/60 border border-emerald-500/40 rounded-xl p-4 text-emerald-200 space-y-2">
+                    <div class="font-extrabold text-sm">🔒 결론부터 말씀드리면: 업로드하신 사진은 서버에 절대 전송되거나 저장되지 않습니다!</div>
+                    <p>이 웹사이트에 올리신 도면, 사진, 캡처 화면은 인터넷을 통해 어디로도 전송되지 않으며, <strong>오직 현재 보고 계신 사용자의 컴퓨터·스마트폰 브라우저 메모리(RAM) 안에서만</strong> 열립니다.</p>
+                </div>
+                <h4 class="font-bold text-white text-xs pt-2">1. 기술적 동작 원리 (100% Client-Side Processing)</h4>
+                <ul class="list-disc list-inside space-y-1.5 text-slate-300">
+                    <li>일반적인 파일 업로드 사이트와 달리 ScaleRuler Pro에는 <strong>서버 전송 코드 자체가 존재하지 않습니다.</strong></li>
+                    <li>웹 브라우저 내장 <code class="text-amber-300">FileReader.readAsDataURL()</code> 및 <code class="text-amber-300">HTML5 Canvas</code> API만을 사용해 내 컴퓨터 안에서 즉시 이미지를 화면에 그립니다.</li>
+                </ul>
+                <h4 class="font-bold text-white text-xs pt-2">2. 창을 닫으면 사진은 어떻게 되나요?</h4>
+                <p>브라우저 탭을 닫거나 새로고침(<kbd class="px-1.5 py-0.5 bg-slate-800 rounded">F5</kbd>)하는 즉시 브라우저 메모리(RAM)에서 사진 데이터가 완전히 소멸됩니다. 사이트 운영자나 제3자는 사용자가 어떤 사진을 열었는지 절대 알 수 없으므로 안심하고 측정하실 수 있습니다.</p>
+            `);
+        }
+    }
 
-    document.getElementById('btn-privacy-badge').addEventListener('click', () => {
-        openInfoModal('🛡️ 업로드 사진 처리 방식 및 개인정보 보안 안내', securityHtml);
-    });
-    document.getElementById('btn-footer-security').addEventListener('click', () => {
-        openInfoModal('🛡️ 업로드 사진 처리 방식 및 개인정보 보안 안내', securityHtml);
-    });
+    document.getElementById('btn-privacy-badge').addEventListener('click', showSecurityModal);
+    document.getElementById('btn-footer-security').addEventListener('click', showSecurityModal);
 
-    // 2. 쿠키 및 광고 정책 모달
-    const cookiePolicyHtml = `
-        <p><strong>ScaleRuler Pro</strong>는 이용자의 편의를 위해 최소한의 브라우저 저장소(<code class="text-amber-300">localStorage</code>) 및 제3자 광고 쿠키를 사용합니다.</p>
-        <h4 class="font-bold text-white text-xs pt-2">1. 필수 기능 저장 항목</h4>
-        <ul class="list-disc list-inside space-y-1">
-            <li>마지막으로 보정한 배율 수치(px 대 실제 단위 비율) 및 선택한 화면 테마(다크/라이트 모드)</li>
-            <li>쿠키 안내 배너 확인 여부</li>
-        </ul>
-        <h4 class="font-bold text-white text-xs pt-2">2. Google AdSense 및 제3자 광고 쿠키 안내</h4>
-        <ul class="list-disc list-inside space-y-1">
-            <li>본 사이트는 무료 서비스 유지를 위해 Google AdSense 또는 카카오 애드핏 등 제3자 광고 서비스를 게재할 수 있습니다.</li>
-            <li>Google을 포함한 제3자 광고 사업자는 쿠키를 사용하여 이용자의 이전 웹사이트 방문 기록을 바탕으로 맞춤형 광고를 제공할 수 있습니다.</li>
-            <li>이용자는 언제든지 <a href="https://adssettings.google.com" target="_blank" rel="noopener" class="underline text-amber-300">Google 광고 설정</a> 페이지에서 맞춤형 광고를 해제하거나 브라우저 설정에서 쿠키 저장을 거부할 수 있습니다.</li>
-        </ul>
-        <div class="pt-2">
-            <a href="privacy.html" class="text-amber-300 underline font-bold">👉 전체 개인정보 처리방침 전문 페이지 보기</a>
-        </div>
-    `;
     document.getElementById('btn-footer-cookie').addEventListener('click', () => {
-        openInfoModal('🍪 쿠키 및 맞춤형 광고 정책 안내', cookiePolicyHtml);
+        if (state.lang === 'en') {
+            openInfoModal('🍪 Cookie & Advertising Policy', `
+                <p><strong>ScaleRuler Pro</strong> uses minimal browser storage (<code class="text-amber-300">localStorage</code>) and third-party advertising cookies to keep this utility free.</p>
+                <h4 class="font-bold text-white text-xs pt-2">1. Local Preferences</h4>
+                <ul class="list-disc list-inside space-y-1">
+                    <li>Stores your last calibrated scale ratio, preferred measurement unit, language, and dark/light theme setting locally on your browser.</li>
+                </ul>
+                <h4 class="font-bold text-white text-xs pt-2">2. Google AdSense & Third-Party Cookies</h4>
+                <ul class="list-disc list-inside space-y-1">
+                    <li>Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites.</li>
+                    <li>Users may opt out of personalized advertising by visiting <a href="https://adssettings.google.com" target="_blank" rel="noopener" class="underline text-amber-300">Google Ads Settings</a>.</li>
+                </ul>
+                <div class="pt-2">
+                    <a href="privacy.html?lang=en" class="text-amber-300 underline font-bold">👉 View Full Privacy Policy</a>
+                </div>
+            `);
+        } else {
+            openInfoModal('🍪 쿠키 및 맞춤형 광고 정책 안내', `
+                <p><strong>ScaleRuler Pro</strong>는 이용자의 편의를 위해 최소한의 브라우저 저장소(<code class="text-amber-300">localStorage</code>) 및 제3자 광고 쿠키를 사용합니다.</p>
+                <h4 class="font-bold text-white text-xs pt-2">1. 필수 기능 저장 항목</h4>
+                <ul class="list-disc list-inside space-y-1">
+                    <li>마지막으로 보정한 배율 수치(px 대 실제 단위 비율), 선택 언어 및 화면 테마(다크/라이트 모드)</li>
+                </ul>
+                <h4 class="font-bold text-white text-xs pt-2">2. Google AdSense 및 제3자 광고 쿠키 안내</h4>
+                <ul class="list-disc list-inside space-y-1">
+                    <li>Google을 포함한 제3자 광고 사업자는 쿠키를 사용하여 이용자의 이전 웹사이트 방문 기록을 바탕으로 맞춤형 광고를 제공할 수 있습니다.</li>
+                    <li>이용자는 언제든지 <a href="https://adssettings.google.com" target="_blank" rel="noopener" class="underline text-amber-300">Google 광고 설정</a> 페이지에서 맞춤형 광고를 해제하거나 브라우저 설정에서 쿠키 저장을 거부할 수 있습니다.</li>
+                </ul>
+                <div class="pt-2">
+                    <a href="privacy.html" class="text-amber-300 underline font-bold">👉 전체 개인정보 처리방침 전문 페이지 보기</a>
+                </div>
+            `);
+        }
     });
 
-    // 3. 광고로 돈 버는 법 (수익화 설정 가이드 모달)
-    const monetizeGuideHtml = `
-        <div class="bg-amber-500/15 border border-amber-400/40 rounded-xl p-4 text-amber-200 space-y-1.5">
-            <div class="font-extrabold text-sm">💰 이 웹사이트로 광고 수익을 창출하는 2가지 방법</div>
-            <p>이 사이트는 이미 <strong>우측 사이드바 광고 슬롯</strong>과 <strong>하단 반응형 배너 슬롯</strong>, 그리고 광고 심사에 필수적인 <strong>개인정보 처리방침·이용약관·풍부한 텍스트 가이드·ads.txt</strong>가 모두 준비되어 있습니다!</p>
-        </div>
-
-        <h4 class="font-bold text-white text-xs pt-2">방법 1. 카카오 애드핏 (Kakao AdFit) — 가장 빠른 승인 (추천!)</h4>
-        <ol class="list-decimal list-inside space-y-1.5 text-slate-300">
-            <li><a href="https://adfit.kakao.com" target="_blank" rel="noopener" class="underline text-amber-300">카카오 애드핏(adfit.kakao.com)</a>에 가입 후 현재 배포된 웹사이트 주소(<code class="text-sky-300">https://backheyoung.github.io/scale-ruler/</code>)를 등록합니다.</li>
-            <li>광고 단위(예: <code class="text-amber-300">300x250</code> 또는 <code class="text-amber-300">320x100</code>, <code class="text-amber-300">728x90</code>)를 생성하면 <code class="text-amber-300">DAN-xxxxxxxx</code> 형태의 단위 ID가 발급됩니다.</li>
-            <li><code class="text-amber-300">app.js</code> 파일 맨 위의 <code class="text-amber-300">AD_CONFIG</code>에서 <code class="text-emerald-300">enabled: true, provider: 'adfit'</code>으로 바꾸고 발급받은 ID를 넣으면 즉시 광고 수익이 쌓입니다!</li>
-        </ol>
-
-        <h4 class="font-bold text-white text-xs pt-2">방법 2. 구글 애드센스 (Google AdSense) — 가장 높은 단가</h4>
-        <ol class="list-decimal list-inside space-y-1.5 text-slate-300">
-            <li><a href="https://www.google.com/adsense" target="_blank" rel="noopener" class="underline text-amber-300">Google AdSense</a>에서 사이트 주소를 등록하고 발급받은 <code class="text-amber-300">ca-pub-XXXXXXXXXXXXXXXX</code> 번호를 <code class="text-amber-300">index.html</code> 상단 주석과 <code class="text-amber-300">ads.txt</code> 파일에 넣습니다.</li>
-            <li>심사 승인 후 <code class="text-amber-300">app.js</code> 상단 <code class="text-amber-300">AD_CONFIG</code>에 슬롯 번호를 입력하고 <code class="text-emerald-300">enabled: true</code>로 변경하면 광고가 자동 노출됩니다.</li>
-            <li><em>팁: 구글 애드센스는 개인 도메인(예: .com / .kr)을 연결하면 GitHub 기본 주소보다 승인 확률이 훨씬 높아집니다. 카카오 애드핏은 GitHub Pages 기본 주소로도 바로 승인받을 수 있습니다!</em></li>
-        </ol>
-    `;
-    document.getElementById('btn-open-ad-guide').addEventListener('click', () => {
-        openInfoModal('💰 웹사이트 광고 수익화 연동 가이드 (AdSense & AdFit)', monetizeGuideHtml);
-    });
-    document.getElementById('btn-footer-monetize').addEventListener('click', () => {
-        openInfoModal('💰 웹사이트 광고 수익화 연동 가이드 (AdSense & AdFit)', monetizeGuideHtml);
-    });
-
-    // --- 실제 광고 스크립트 자동 렌더링 (AD_CONFIG.enabled === true 일 때) ---
+    // --- AdSense 슬롯 자동 렌더링 (발급 후 AD_CONFIG.enabled = true 시 자동 표시) ---
     function initAdSlots() {
         if (!AD_CONFIG.enabled) return;
+        const sidebarWrapper = document.getElementById('sidebar-ad-wrapper');
+        const bannerWrapper = document.getElementById('banner-ad-wrapper');
         const sidebarSlot = document.getElementById('ad-slot-sidebar');
         const bannerSlot = document.getElementById('ad-slot-banner');
 
-        if (AD_CONFIG.provider === 'adfit') {
-            if (sidebarSlot) {
-                sidebarSlot.innerHTML = `<ins class="kakao_ad_area" style="display:none;" data-ad-unit="${AD_CONFIG.adfitUnitSidebar}" data-ad-width="320" data-ad-height="100"></ins>`;
-            }
-            if (bannerSlot) {
-                bannerSlot.innerHTML = `<ins class="kakao_ad_area" style="display:none;" data-ad-unit="${AD_CONFIG.adfitUnitBanner}" data-ad-width="728" data-ad-height="90"></ins>`;
-            }
-            const s = document.createElement('script');
-            s.async = true;
-            s.type = 'text/javascript';
-            s.src = '//t1.daumcdn.net/kas/static/ba.min.js';
-            document.body.appendChild(s);
-        } else if (AD_CONFIG.provider === 'adsense') {
-            const s = document.createElement('script');
-            s.async = true;
-            s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${AD_CONFIG.adsenseClient}`;
-            s.crossOrigin = 'anonymous';
-            document.head.appendChild(s);
+        if (sidebarWrapper) sidebarWrapper.classList.remove('hidden');
+        if (bannerWrapper) bannerWrapper.classList.remove('hidden');
 
-            if (sidebarSlot) {
-                sidebarSlot.innerHTML = `<ins class="adsbygoogle" style="display:block;width:100%;height:90px" data-ad-client="${AD_CONFIG.adsenseClient}" data-ad-slot="${AD_CONFIG.adsenseSlotSidebar}" data-ad-format="auto"></ins>`;
-                try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
-            }
-            if (bannerSlot) {
-                bannerSlot.innerHTML = `<ins class="adsbygoogle" style="display:block;width:100%;height:90px" data-ad-client="${AD_CONFIG.adsenseClient}" data-ad-slot="${AD_CONFIG.adsenseSlotBanner}" data-ad-format="auto" data-full-width-responsive="true"></ins>`;
-                try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
-            }
+        const s = document.createElement('script');
+        s.async = true;
+        s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${AD_CONFIG.adsenseClient}`;
+        s.crossOrigin = 'anonymous';
+        document.head.appendChild(s);
+
+        if (sidebarSlot) {
+            sidebarSlot.innerHTML = `<ins class="adsbygoogle" style="display:block;width:100%;height:90px" data-ad-client="${AD_CONFIG.adsenseClient}" data-ad-slot="${AD_CONFIG.adsenseSlotSidebar}" data-ad-format="auto"></ins>`;
+            try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
+        }
+        if (bannerSlot) {
+            bannerSlot.innerHTML = `<ins class="adsbygoogle" style="display:block;width:100%;height:90px" data-ad-client="${AD_CONFIG.adsenseClient}" data-ad-slot="${AD_CONFIG.adsenseSlotBanner}" data-ad-format="auto" data-full-width-responsive="true"></ins>`;
+            try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
         }
     }
 
     // 초기화 실행
-    recalculateScale();
+    applyLanguage(state.lang);
     resizeMainCanvas();
     initAdSlots();
 });
