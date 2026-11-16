@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>개인정보 처리방침 - ScaleRuler Pro</title>
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200 min-h-screen flex flex-col">
+
+    <!-- 상단 네비게이션 -->
+    <header class="bg-slate-900 border-b border-slate-800 px-4 sm:px-8 py-4 sticky top-0 z-20">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-950 px-3 py-1.5 rounded-lg font-extrabold text-xs tracking-tight transition">
+                <span>📏 ScaleRuler Pro 홈으로 돌아가기</span>
+            </a>
+            <div class="flex items-center gap-4 text-xs font-medium text-slate-400">
+                <a href="privacy.html" class="text-amber-300 font-bold">개인정보 처리방침</a>
+                <a href="terms.html" class="hover:text-white transition">서비스 이용약관</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 본문 -->
+    <main class="max-w-4xl mx-auto w-full px-4 sm:px-8 py-10 flex-1 space-y-8">
+        <div class="border-b border-slate-800 pb-6">
+            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">PRIVACY POLICY</span>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">개인정보 처리방침</h1>
+            <p class="text-xs text-slate-400 mt-2">시행일자: 2026년 11월 16일 · 최종 수정일: 2026년 11월 16일</p>
+        </div>
+
+        <!-- 핵심 요약 박스 -->
+        <div class="bg-emerald-950/40 border border-emerald-500/30 rounded-2xl p-5 space-y-2 text-xs sm:text-sm">
+            <div class="font-extrabold text-emerald-300 text-sm sm:text-base flex items-center gap-2">
+                <span>🔒</span>
+                <span>핵심 요약: 이용자가 불러온 사진·도면은 서버로 절대 전송되지 않습니다</span>
+            </div>
+            <p class="text-slate-300 leading-relaxed">
+                <strong>ScaleRuler Pro</strong>(이하 "서비스")는 회원가입 없이 누구나 즉시 이용할 수 있는 웹 기반 치수·배율 측정 도구입니다. 이용자가 측정을 위해 불러오거나 붙여넣기(<kbd class="px-1.5 py-0.5 bg-slate-800 rounded">Ctrl+V</kbd>)한 모든 사진 및 도면 파일은 <strong>오직 이용자 본인의 웹 브라우저 메모리(Client-Side) 내에서만 처리</strong>되며, 당사 서버나 외부 클라우드로 전송·수집·저장되지 않습니다.
+            </p>
+        </div>
+
+        <section class="space-y-6 text-xs sm:text-sm leading-relaxed text-slate-300">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                <h2 class="text-base font-bold text-white">제1조 (개인정보의 처리 목적 및 수집 항목)</h2>
+                <p>본 서비스는 별도의 회원가입, 로그인 절차를 요구하지 않으며, 이름·주민등록번호·전화번호·이메일 주소 등 개인을 식별할 수 있는 정보를 일체 수집하지 않습니다.</p>
+                <ul class="list-disc list-inside space-y-1.5 text-slate-400">
+                    <li><strong>업로드 이미지/도면 데이터:</strong> 브라우저 내부 API(<code class="text-amber-300">FileReader</code> 및 <code class="text-amber-300">HTML5 Canvas</code>)를 통해 이용자의 기기 화면에만 렌더링되며, 네트워크를 통해 외부로 전송되지 않습니다. 브라우저 창을 닫거나 새로고침하면 즉시 메모리에서 완전 삭제됩니다.</li>
+                    <li><strong>브라우저 로컬 저장소(localStorage):</strong> 이용자가 설정한 배율 기준값, 선호 단위(mm/cm/m), 다크/라이트 테마 설정을 기억하기 위해 이용자 기기의 브라우저 저장소에 비식별 설정값만 저장합니다.</li>
+                </ul>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                <h2 class="text-base font-bold text-white">제2조 (자동 수집 장치 및 제3자 광고 쿠키에 관한 사항)</h2>
+                <p>본 서비스는 무료 웹 유틸리티 운영 및 유지보수를 위해 <strong>Google AdSense(구글 애드센스)</strong>, <strong>Kakao AdFit(카카오 애드핏)</strong> 등 제3자 광고 플랫폼을 사용할 수 있습니다.</p>
+                <ol class="list-decimal list-inside space-y-2 text-slate-400">
+                    <li>Google을 비롯한 제3자 광고 사업자는 쿠키(Cookie) 및 웹 비콘(Web Beacon)을 사용하여 이용자가 본 사이트 및 다른 웹사이트에 방문한 기록을 바탕으로 관심사 기반의 맞춤형 광고를 제공할 수 있습니다.</li>
+                    <li>이용자는 Google의 광고 쿠키 사용을 원치 않을 경우, 언제든지 <a href="https://adssettings.google.com" target="_blank" rel="noopener" class="text-amber-300 underline">Google 광고 설정(adssettings.google.com)</a> 또는 <a href="https://www.aboutads.info" target="_blank" rel="noopener" class="text-amber-300 underline">www.aboutads.info</a>를 방문하여 맞춤형 광고 노출을 해제(Opt-out)할 수 있습니다.</li>
+                    <li>웹 브라우저의 옵션 설정을 통해 모든 쿠키를 허용하거나, 쿠키가 저장될 때마다 확인을 거치거나, 모든 쿠키의 저장을 거부할 수 있습니다. (예: Chrome 설정 &gt; 개인정보 보호 및 보안 &gt; 서드파티 쿠키)</li>
+                </ol>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                <h2 class="text-base font-bold text-white">제3조 (개인정보의 보유 및 파기)</h2>
+                <p>본 서비스는 이용자의 개인정보나 이미지 파일을 서버에 수집·보유하지 않으므로 별도의 서버 DB 보관 기간이 존재하지 않습니다. 이용자의 기기 브라우저(<code class="text-amber-300">localStorage</code>)에 저장된 환경설정 값은 이용자가 브라우저의 '인터넷 사용 기록 삭제' 기능을 통해 언제든지 직접 삭제할 수 있습니다.</p>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                <h2 class="text-base font-bold text-white">제4조 (정보주체의 권리·의무 및 행사방법)</h2>
+                <p>이용자는 언제든지 웹 브라우저의 쿠키 차단 기능을 활성화하여 제3자 광고 트래킹을 거부할 권리가 있으며, 서비스 이용 중 궁금하신 사항이나 권리 침해 문의는 아래 연락처 및 공식 저장소 이슈 게시판을 통해 접수하실 수 있습니다.</p>
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 text-xs text-slate-400 space-y-1">
+                    <div><strong>서비스명:</strong> ScaleRuler Pro (컴퓨터용 정밀 배율 측정 자)</div>
+                    <div><strong>관리자 및 문의 채널:</strong> <a href="https://github.com/backheyoung/scale-ruler/issues" target="_blank" rel="noopener" class="text-amber-300 underline">GitHub 공식 저장소 문의 게시판</a></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 하단 푸터 -->
+    <footer class="bg-slate-950 border-t border-slate-900 text-slate-500 text-xs py-6 px-4 sm:px-8">
+        <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <span>Copyright © 2026 ScaleRuler Pro. All rights reserved.</span>
+            <div class="flex gap-4">
+                <a href="index.html" class="hover:text-amber-300">메인 측정 도구</a>
+                <a href="privacy.html" class="text-amber-300 font-bold">개인정보 처리방침</a>
+                <a href="terms.html" class="hover:text-amber-300">이용약관</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

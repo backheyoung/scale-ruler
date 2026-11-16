@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>ScaleRuler Pro - 컴퓨터용 정밀 화면 자 & 도면 배율 치수·면적 측정기</title>
+    <meta name="description" content="설치 없이 웹 브라우저에서 바로 쓰는 컴퓨터용 정밀 화면 자(Screen Ruler) 및 도면 배율 측정기. 마우스 2점 클릭 배율 보정, 신용카드 실물 크기(1:1) 보정, 거리·각도·평수(면적) 측정, 100% 브라우저 로컬 처리로 개인정보 유출 걱정 없이 안전하게 사용하세요.">
+    <meta name="keywords" content="컴퓨터용 자, 화면 자, 온라인 자, 픽셀 자, 도면 배율 측정, 평면도 치수 재기, 실물 크기 자, Screen Ruler, CAD Scale Ruler, 평수 계산기">
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <!-- Open Graph / SNS 공유 메타태그 -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="ScaleRuler Pro - 컴퓨터용 정밀 화면 자 & 도면 배율 치수 측정기">
+    <meta property="og:description" content="사진·도면을 붙여넣고(Ctrl+V) 두 점만 클릭해 실제 치수와 면적(평수)을 정밀 측정하세요. 100% 브라우저 로컬 처리로 서버에 사진이 남지 않습니다.">
+    <meta property="og:locale" content="ko_KR">
+
+    <!-- Google AdSense 연동 준비 (승인 후 본인 ca-pub-XXXXXXXXXXXX 번호로 교체) -->
+    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000" crossorigin="anonymous"></script> -->
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- 구조화 데이터 (SEO & Google 검색 노출 최적화) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "ScaleRuler Pro - 컴퓨터용 정밀 화면 자 & 도면 배율 측정기",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Web Browser (Windows, macOS, Android, iOS)",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "KRW"
+      },
+      "description": "화면 위에서 실물 크기 눈금자를 띄우거나 도면·사진의 기준점 2점을 클릭해 실제 길이(mm/cm/m), 각도, 면적(㎡/평)을 측정하는 무료 웹 도구입니다."
+    }
+    </script>
+</head>
+<body class="bg-slate-950 text-slate-100 flex flex-col min-h-screen">
+
+    <!-- ==================== 상단 메인 툴바 ==================== -->
+    <header class="app-panel bg-slate-900 border-b border-slate-800 px-3 py-2 flex flex-wrap items-center justify-between gap-2 z-30 shadow-md sticky top-0">
+        <!-- 좌측: 브랜드 로고 + 로컬 보안 배지 + 측정 도구 버튼들 -->
+        <div class="flex flex-wrap items-center gap-1.5">
+            <!-- 로고 -->
+            <a href="#" class="flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-950 px-3 py-1.5 rounded-lg font-extrabold text-xs tracking-tight shadow transition">
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+                    <rect x="2" y="6" width="20" height="12" rx="2" />
+                    <path d="M6 6v4M10 6v6M14 6v4M18 6v6" />
+                </svg>
+                <span>ScaleRuler Pro</span>
+            </a>
+
+            <!-- 100% 로컬 처리 안심 배지 -->
+            <button id="btn-privacy-badge" class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 text-[11px] font-bold transition cursor-pointer" title="업로드한 사진은 서버로 전송되지 않고 100% 내 컴퓨터 브라우저 안에서만 작동합니다 (클릭하여 상세 보기)">
+                <span>🔒</span>
+                <span class="hidden sm:inline">사진 서버전송 0% (안심보안)</span>
+                <span class="sm:hidden">보안안심</span>
+            </button>
+
+            <div class="h-5 w-[1px] bg-slate-700 mx-0.5 hidden md:block"></div>
+
+            <!-- 1. 기준점 2점 클릭 배율 설정 -->
+            <button id="btn-mode-calibrate" class="tool-btn pulse-highlight flex items-center gap-1.5 px-2.5 py-1.5 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/40 rounded-lg text-xs font-bold cursor-pointer" title="화면에서 두 지점을 클릭하고 실제 수치를 입력해 배율을 맞춥니다 (단축키: C)">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                <span>1단계: 2점 배율 보정</span>
+            </button>
+
+            <!-- 신용카드/모니터 실물 1:1 보정 -->
+            <button id="btn-open-card-calib" class="tool-btn flex items-center gap-1 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-amber-200 border border-slate-700 rounded-lg text-xs font-semibold cursor-pointer" title="모니터 화면에 실제 신용카드를 대거나 모니터 인치를 선택해 1:1 실물 크기 자로 보정합니다">
+                <span>💳</span>
+                <span class="hidden lg:inline">실물 1:1 보정</span>
+            </button>
+
+            <!-- 2. 거리 측정 (2점) -->
+            <button id="btn-mode-measure" class="tool-btn active flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-xs font-semibold cursor-pointer" title="두 지점을 클릭하여 배율이 적용된 실제 길이를 측정합니다 (단축키: M)">
+                <svg class="w-3.5 h-3.5 text-sky-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                </svg>
+                <span>거리 측정</span>
+            </button>
+
+            <!-- 3. 사각형 면적/평수 측정 (NEW) -->
+            <button id="btn-mode-area" class="tool-btn flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-xs font-semibold cursor-pointer" title="대각선 두 지점을 클릭해 사각형 가로×세로 및 면적(㎡·평)을 한 번에 계산합니다 (단축키: S)">
+                <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <rect x="3" y="5" width="18" height="14" rx="2" stroke-dasharray="4 2" />
+                    <path stroke-linecap="round" d="M7 9h10M7 15h6" />
+                </svg>
+                <span>면적·평수</span>
+            </button>
+
+            <!-- 4. 연속 구간 합계 측정 (NEW) -->
+            <button id="btn-mode-poly" class="tool-btn flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-xs font-semibold cursor-pointer" title="여러 지점을 연속으로 클릭하여 총합 길이를 측정합니다. 완료하려면 우클릭 또는 더블클릭 (단축키: P)">
+                <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 17l6-6 4 4 8-8" />
+                </svg>
+                <span class="hidden xl:inline">연속거리</span>
+            </button>
+
+            <!-- 5. 각도 측정 (3점) -->
+            <button id="btn-mode-angle" class="tool-btn flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-xs font-semibold cursor-pointer" title="시작점 → 꼭짓점 → 끝점 세 곳을 클릭해 각도를 측정합니다 (단축키: A)">
+                <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5L16 4" />
+                </svg>
+                <span>각도</span>
+            </button>
+
+            <!-- 6. 화면 이동 (Pan) -->
+            <button id="btn-mode-pan" class="tool-btn flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-xs font-semibold cursor-pointer" title="화면을 드래그하여 이동합니다 (스페이스바 누른 채 드래그 가능)">
+                <svg class="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11" />
+                </svg>
+                <span class="hidden lg:inline">이동</span>
+            </button>
+        </div>
+
+        <!-- 우측 도구: 눈금자, 단위, 사진 열기, 샘플 도면, 이미지 저장, 테마 -->
+        <div class="flex flex-wrap items-center gap-1.5">
+            <!-- 눈금자 컨트롤 -->
+            <div class="flex items-center bg-slate-800 rounded-lg border border-slate-700 p-0.5">
+                <button id="btn-toggle-ruler" class="px-2 py-1 rounded-md bg-emerald-600 text-white text-xs font-semibold transition cursor-pointer flex items-center gap-1" title="화면 위 노란색 플로팅 눈금자 켜기/끄기">
+                    <span>📏 눈금자</span>
+                </button>
+                <button id="btn-rotate-ruler" class="px-2 py-1 text-slate-300 hover:text-white text-xs font-medium cursor-pointer" title="눈금자 가로/세로 회전 (단축키: R)">
+                    ↻
+                </button>
+            </div>
+
+            <!-- 단위 선택 -->
+            <div class="flex items-center bg-slate-800 p-0.5 rounded-lg border border-slate-700 text-xs font-mono-num">
+                <span class="text-[11px] text-slate-400 px-1.5 hidden sm:inline">단위:</span>
+                <select id="select-unit" class="bg-slate-900 text-amber-300 font-bold px-2 py-1 rounded border border-slate-700 outline-none cursor-pointer" aria-label="측정 표시 단위">
+                    <option value="mm" selected>mm</option>
+                    <option value="cm">cm</option>
+                    <option value="m">m</option>
+                    <option value="inch">inch</option>
+                    <option value="px">px</option>
+                </select>
+            </div>
+
+            <!-- 사진/도면 불러오기 -->
+            <label class="flex items-center gap-1.5 px-2.5 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold transition cursor-pointer shadow" title="내 컴퓨터의 사진/도면을 불러오거나 화면 캡처 후 Ctrl+V를 누르세요 (서버에 전송되지 않음)">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>사진/도면 열기</span>
+                <input type="file" id="input-image" accept="image/*" class="hidden">
+            </label>
+
+            <!-- 샘플 도면 바로 체험 -->
+            <button id="btn-load-sample" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700 rounded-lg text-xs font-semibold transition cursor-pointer" title="샘플 아파트 평면도를 불러와 바로 치수·평수 측정을 체험해 봅니다">
+                🏠 샘플 도면
+            </button>
+
+            <!-- 치수 포함 이미지 저장 (PNG) -->
+            <button id="btn-export-png" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-slate-700 rounded-lg text-xs font-semibold transition cursor-pointer flex items-center gap-1" title="현재 도면과 측정된 치수선들을 합쳐서 PNG 이미지 파일로 저장합니다">
+                <span>💾</span>
+                <span class="hidden md:inline">이미지 저장</span>
+            </button>
+
+            <!-- 줌 컨트롤 -->
+            <div class="flex items-center bg-slate-800 rounded-lg border border-slate-700 text-xs font-mono-num">
+                <button id="btn-zoom-out" class="px-2 py-1 hover:bg-slate-700 text-slate-300 cursor-pointer" title="축소">-</button>
+                <button id="btn-zoom-reset" class="px-2 py-1 hover:bg-slate-700 text-sky-300 font-bold cursor-pointer" title="클릭하여 100% 맞춤 초기화">100%</button>
+                <button id="btn-zoom-in" class="px-2 py-1 hover:bg-slate-700 text-slate-300 cursor-pointer" title="확대">+</button>
+            </div>
+
+            <!-- 다크/라이트 테마 토글 -->
+            <button id="btn-theme-toggle" class="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-lg text-xs cursor-pointer" title="어두운 화면 / 밝은 화면 전환">
+                🌓
+            </button>
+
+            <!-- 사용법 및 안내 이동 -->
+            <a href="#guide-section" class="px-2 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-lg text-xs font-medium hidden xl:inline-block" title="하단 상세 사용법 및 보안 안내 보기">
+                ❓ 도움말
+            </a>
+        </div>
+    </header>
+
+    <!-- ==================== 상단 보조 상태 & 배율 안내 바 ==================== -->
+    <div class="app-subpanel bg-slate-900/95 border-b border-slate-800 px-3 py-1.5 flex flex-wrap items-center justify-between gap-2 text-xs z-20">
+        <div class="flex flex-wrap items-center gap-2">
+            <!-- 현재 적용 배율 배지 -->
+            <div class="flex items-center gap-1.5 bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-md">
+                <span class="text-slate-400 font-medium">현재 배율:</span>
+                <span id="badge-scale-status" class="font-mono-num font-bold text-amber-300">
+                    기본값 (100 px = 100 mm)
+                </span>
+                <button id="btn-direct-scale" class="ml-1 px-2 py-0.5 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded text-[11px] transition cursor-pointer">
+                    수치/축척 입력
+                </button>
+            </div>
+
+            <!-- 도면 투명도 조절 (도면이 있을 때만 활성 표시) -->
+            <div id="bg-opacity-control" class="hidden items-center gap-1.5 bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-md text-[11px]">
+                <span class="text-slate-400">도면 밝기:</span>
+                <input type="range" id="slider-bg-opacity" min="20" max="100" value="100" class="w-16 accent-amber-400 cursor-pointer">
+                <button id="btn-clear-bg" class="text-rose-400 hover:text-rose-300 ml-1 font-semibold cursor-pointer" title="배경 사진 지우기">사진제거</button>
+            </div>
+
+            <!-- 현재 모드 가이드 메시지 -->
+            <div id="mode-guide-banner" class="flex items-center gap-1.5 text-sky-300 font-medium">
+                <span class="w-2 h-2 rounded-full bg-sky-400 shrink-0"></span>
+                <span id="mode-guide-text">측정할 두 지점(시작점 → 끝점)을 클릭하세요. (Shift: 수평/수직 직교 스냅, 이미 찍은 점 드래그 수정 가능)</span>
+            </div>
+        </div>
+
+        <!-- 우측: 실행 취소 + 좌표 표시 -->
+        <div class="flex items-center gap-2 text-[11px] text-slate-400 font-mono-num">
+            <button id="btn-undo" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded text-[11px] cursor-pointer" title="방금 측정한 항목 실행 취소 (Ctrl+Z)">
+                ↩ 실행취소 (Ctrl+Z)
+            </button>
+            <span class="hidden sm:inline">좌표: <strong id="status-coords" class="text-slate-200">X: 0, Y: 0</strong></span>
+            <button id="btn-toggle-sidebar-mobile" class="md:hidden px-2 py-0.5 bg-sky-600 text-white rounded font-sans font-bold">
+                목록 보기
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== 메인 워크스페이스 (캔버스 + 우측 사이드바) ==================== -->
+    <div class="flex flex-col md:flex-row relative" style="height: calc(100vh - 96px); min-height: 540px;">
+
+        <!-- 중앙 캔버스 작업 영역 -->
+        <main id="canvas-viewport" class="flex-1 relative overflow-hidden bg-slate-950 cursor-crosshair select-none">
+            <canvas id="main-canvas" class="block w-full h-full"></canvas>
+
+            <!-- 초기 온보딩 빠른 시작 카드 (이미지를 불러오거나 닫으면 숨겨짐) -->
+            <div id="welcome-overlay" class="absolute top-4 left-4 z-10 max-w-md pointer-events-auto">
+                <div class="bg-slate-900/95 backdrop-blur-md border border-slate-700 rounded-2xl p-4 shadow-2xl text-xs space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="font-extrabold text-amber-300 text-sm flex items-center gap-1.5">
+                            <span>🎯</span>
+                            <span>누구나 10초 만에 쓰는 정밀 측정 가이드</span>
+                        </span>
+                        <button id="btn-close-welcome" class="text-slate-400 hover:text-white px-1.5 py-0.5 rounded cursor-pointer" title="안내창 닫기">✕</button>
+                    </div>
+
+                    <ol class="list-decimal list-inside space-y-1.5 text-slate-300 leading-relaxed">
+                        <li>측정할 도면·사진을 <kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-600 rounded text-white font-mono-num">Ctrl+V</kbd>로 붙여넣거나 화면에 바로 가져다 댑니다.</li>
+                        <li>상단 주황색 <strong>[1단계: 2점 배율 보정]</strong>을 누르고, 실제 길이를 아는 구간의 <strong>시작점·끝점</strong>을 클릭해 수치를 입력합니다.</li>
+                        <li>이제 <strong>[거리 측정]</strong>, <strong>[면적·평수]</strong>, <strong>[각도]</strong> 버튼으로 어디든 클릭만 하면 실제 치수로 자동 환산됩니다!</li>
+                    </ol>
+
+                    <!-- 원클릭 빠른 체험 버튼들 -->
+                    <div class="grid grid-cols-2 gap-2 pt-1">
+                        <button id="btn-welcome-sample" class="py-2 px-3 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold rounded-xl shadow text-xs transition cursor-pointer flex items-center justify-center gap-1.5">
+                            <span>🏠</span>
+                            <span>샘플 평면도로 체험하기</span>
+                        </button>
+                        <button id="btn-welcome-card" class="py-2 px-3 bg-slate-800 hover:bg-slate-700 text-amber-200 border border-slate-600 font-bold rounded-xl text-xs transition cursor-pointer flex items-center justify-center gap-1.5">
+                            <span>💳</span>
+                            <span>모니터 실물 1:1 자 맞추기</span>
+                        </button>
+                    </div>
+
+                    <!-- 사진 개인정보 안심 안내 요약 -->
+                    <div class="bg-emerald-950/50 border border-emerald-500/30 rounded-xl p-2.5 flex items-start gap-2 text-[11px] text-emerald-200">
+                        <span class="text-sm leading-none mt-0.5">🛡️</span>
+                        <div>
+                            <strong>올린 사진은 어떻게 되나요? (100% 안심 보안)</strong><br>
+                            불러온 사진·도면은 외부 서버로 <strong>절대 업로드되지 않으며</strong>, 오직 현재 사용자의 인터넷 창(브라우저 메모리) 안에서만 처리된 후 창을 닫으면 즉시 사라집니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 기준점 2점 클릭 직후 뜨는 "여기는 실제 몇 수치입니까?" 플로팅 팝업 -->
+            <div id="calibration-popup" class="hidden absolute z-40 bg-slate-900 border-2 border-amber-400 rounded-2xl p-4 shadow-2xl w-80">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-extrabold text-amber-300 flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                        기준 구간 실제 치수 입력
+                    </span>
+                    <button id="btn-cancel-calib-popup" class="text-slate-400 hover:text-white text-xs cursor-pointer">✕</button>
+                </div>
+                <p class="text-[11px] text-slate-300 mb-2.5 leading-relaxed">
+                    방금 클릭한 두 점 사이의 화면 거리는 <strong id="calib-popup-px" class="font-mono-num text-amber-300">0.0 px</strong> 입니다.<br>
+                    이 구간의 <strong>실제 길이</strong>는 얼마입니까?
+                </p>
+                <div class="flex gap-1.5 mb-2">
+                    <input type="number" id="input-calib-value" step="any" min="0.0001" placeholder="예: 1500" class="flex-1 bg-slate-950 border border-slate-700 focus:border-amber-400 rounded-lg px-3 py-2 text-sm font-mono-num font-bold text-white outline-none">
+                    <select id="select-calib-unit" class="bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-2 text-xs font-mono-num font-bold text-amber-300 outline-none cursor-pointer">
+                        <option value="mm" selected>mm</option>
+                        <option value="cm">cm</option>
+                        <option value="m">m</option>
+                        <option value="inch">inch</option>
+                    </select>
+                </div>
+                <!-- 자주 쓰는 기준 수치 원클릭 버튼 -->
+                <div class="flex flex-wrap gap-1 mb-3">
+                    <button type="button" data-val="85.6" data-unit="mm" class="calib-preset-btn px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[10px] border border-slate-700 cursor-pointer">신용카드 (85.6mm)</button>
+                    <button type="button" data-val="210" data-unit="mm" class="calib-preset-btn px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[10px] border border-slate-700 cursor-pointer">A4가로 (210mm)</button>
+                    <button type="button" data-val="1000" data-unit="mm" class="calib-preset-btn px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[10px] border border-slate-700 cursor-pointer">1m (1000mm)</button>
+                    <button type="button" data-val="3000" data-unit="mm" class="calib-preset-btn px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[10px] border border-slate-700 cursor-pointer">3m (3000mm)</button>
+                </div>
+                <button id="btn-apply-calib-popup" class="w-full py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs rounded-lg shadow transition cursor-pointer">
+                    이 수치로 배율 확정 (Enter)
+                </button>
+            </div>
+
+            <!-- 드래그 가능한 배율 연동 반투명 화면 눈금자 (Floating Screen Ruler) -->
+            <div id="floating-ruler" class="absolute rounded-lg border-2 border-amber-400/90 bg-amber-300/90 text-slate-950 select-none z-20" style="left: 60px; top: 380px; width: 660px; height: 86px;">
+                <canvas id="floating-ruler-canvas" class="w-full h-full block rounded-md pointer-events-none"></canvas>
+
+                <!-- 눈금자 위 마우스 가이드라인 -->
+                <div id="ruler-laser" class="hidden absolute pointer-events-none bg-red-600 z-10">
+                    <div id="ruler-laser-badge" class="absolute bg-slate-950 text-amber-300 text-[11px] font-mono-num font-bold px-2 py-0.5 rounded shadow border border-amber-400/50 whitespace-nowrap">
+                        0.0 mm
+                    </div>
+                </div>
+
+                <!-- 눈금자 중앙 이동 핸들 & 핀 초기화 -->
+                <div id="ruler-drag-area" class="absolute inset-0 cursor-move flex items-center justify-center group" title="드래그하여 자 이동 · 눈금 위를 클릭하면 P1/P2 거리 측정 핀이 고정됩니다">
+                    <div class="px-3 py-0.5 rounded-full bg-slate-950/15 group-hover:bg-slate-950/25 transition flex items-center gap-2 pointer-events-none">
+                        <span id="ruler-scale-label" class="text-[11px] font-mono-num font-bold text-slate-900">배율 연동 눈금자 (mm)</span>
+                    </div>
+                </div>
+
+                <!-- 눈금자 우측 상단 미니 컨트롤 (회전 / 투명도 / 핀 리셋) -->
+                <div class="absolute right-5 top-1 flex items-center gap-1 z-20">
+                    <button id="btn-ruler-pin-clear" class="hidden px-1.5 py-0.5 rounded bg-slate-900/80 text-amber-300 text-[10px] font-mono-num font-bold hover:bg-slate-900 cursor-pointer" title="눈금자 핀 초기화">핀 해제</button>
+                    <button id="btn-ruler-opacity" class="px-1.5 py-0.5 rounded bg-slate-900/20 hover:bg-slate-900/40 text-slate-900 text-[10px] font-bold cursor-pointer" title="눈금자 반투명/불투명 조절">투명도</button>
+                </div>
+
+                <!-- 눈금자 길이 조절 핸들 -->
+                <div id="ruler-resize-grip" class="absolute right-0 top-0 bottom-0 w-4 bg-slate-950/15 hover:bg-blue-600/40 cursor-ew-resize flex items-center justify-center rounded-r-md transition" title="드래그하여 눈금자 길이 조절">
+                    <div class="w-1 h-6 bg-slate-900/50 rounded-full"></div>
+                </div>
+            </div>
+
+            <!-- 정밀 픽셀 돋보기 (Magnifier Loupe - 우측 하단) -->
+            <div id="loupe-container" class="absolute bottom-4 right-4 bg-slate-900/95 border-2 border-slate-700 rounded-2xl p-2 shadow-2xl z-30 flex flex-col items-center">
+                <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden border border-slate-700 bg-slate-950 pointer-events-none">
+                    <canvas id="loupe-canvas" width="128" height="128" class="w-full h-full block"></canvas>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-full h-[1px] bg-amber-400/70"></div>
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="h-full w-[1px] bg-amber-400/70"></div>
+                    </div>
+                </div>
+                <div class="mt-1.5 flex items-center justify-between w-full px-1 text-[10px] font-mono-num text-slate-300 gap-1">
+                    <button id="btn-loupe-zoom" class="hover:text-amber-300 font-bold cursor-pointer" title="클릭하여 돋보기 배율 변경 (4x / 8x)">🔍 4x</button>
+                    <span id="loupe-coord" class="text-amber-300">0, 0</span>
+                </div>
+            </div>
+        </main>
+
+        <!-- ==================== 우측 사이드바 (배율 요약 + 실시간 수치 + 기록 목록 + 광고 슬롯) ==================== -->
+        <aside id="right-sidebar" class="app-panel w-full md:w-80 bg-slate-900 border-t md:border-t-0 md:border-l border-slate-800 flex flex-col z-20 shrink-0 max-h-[50vh] md:max-h-none">
+            <!-- 섹션 1: 기준점 배율 설정 요약 카드 -->
+            <div class="p-3 border-b border-slate-800 bg-slate-900/60">
+                <div class="flex items-center justify-between mb-2">
+                    <h2 class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                        </svg>
+                        <span>기준 배율 (Scale) 설정값</span>
+                    </h2>
+                    <div class="flex gap-1">
+                        <button id="btn-recalibrate" class="text-[11px] bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 px-2 py-0.5 rounded font-semibold transition cursor-pointer">
+                            2점 다시 찍기
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs space-y-1 font-mono-num">
+                    <div class="flex justify-between">
+                        <span class="text-slate-400">기준 픽셀 거리:</span>
+                        <span id="sidebar-ref-px" class="text-slate-200 font-semibold">100.0 px</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-400">실제 기준 치수:</span>
+                        <span id="sidebar-ref-real" class="text-amber-300 font-bold">100.0 mm</span>
+                    </div>
+                    <div class="h-[1px] bg-slate-800 my-1"></div>
+                    <div class="flex justify-between text-[11px]">
+                        <span class="text-slate-400">환산 비율:</span>
+                        <span id="sidebar-scale-factor" class="text-emerald-400 font-semibold">1 px = 1.0000 mm</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 섹션 2: 실시간 선택/측정 중인 치수 상세 -->
+            <div class="p-3 border-b border-slate-800 bg-slate-800/30">
+                <div class="text-xs font-bold text-slate-300 mb-2 flex items-center justify-between">
+                    <span>실시간 측정 수치</span>
+                    <span id="live-type-badge" class="text-[10px] font-mono-num bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded">거리 측정</span>
+                </div>
+                <div class="grid grid-cols-2 gap-1.5 font-mono-num">
+                    <div class="bg-slate-950 border border-slate-800 rounded-lg p-2 col-span-2 flex items-baseline justify-between">
+                        <span id="live-main-label" class="text-[11px] text-slate-400">실제 거리 (ΔL):</span>
+                        <span id="live-dist" class="text-base font-extrabold text-amber-300">0.0 mm</span>
+                    </div>
+                    <div class="bg-slate-950 border border-slate-800 rounded-lg p-1.5">
+                        <div class="text-[10px] text-slate-400">가로 (ΔX)</div>
+                        <div id="live-dx" class="text-xs font-bold text-slate-200 mt-0.5">0.0 mm</div>
+                    </div>
+                    <div class="bg-slate-950 border border-slate-800 rounded-lg p-1.5">
+                        <div class="text-[10px] text-slate-400">세로 (ΔY)</div>
+                        <div id="live-dy" class="text-xs font-bold text-slate-200 mt-0.5">0.0 mm</div>
+                    </div>
+                    <div class="bg-slate-950 border border-slate-800 rounded-lg p-1.5">
+                        <div class="text-[10px] text-slate-400">원본 픽셀 (px)</div>
+                        <div id="live-px" class="text-xs font-bold text-slate-300 mt-0.5">0.0 px</div>
+                    </div>
+                    <div class="bg-slate-950 border border-slate-800 rounded-lg p-1.5">
+                        <div class="text-[10px] text-slate-400">각도 / 평수</div>
+                        <div id="live-angle" class="text-xs font-bold text-purple-300 mt-0.5">0.0°</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 섹션 3: 측정 기록 리스트 & 내보내기 -->
+            <div class="flex-1 flex flex-col overflow-hidden min-h-[140px]">
+                <div class="px-3 py-2 flex items-center justify-between border-b border-slate-800">
+                    <span class="text-xs font-bold text-slate-300">측정 기록 (<span id="measurement-count" class="font-mono-num text-sky-400">0</span>)</span>
+                    <div class="flex items-center gap-1.5">
+                        <button id="btn-export-csv" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-emerald-300 px-2 py-0.5 rounded border border-slate-700 font-medium cursor-pointer" title="측정 목록을 엑셀(CSV) 파일로 저장">
+                            엑셀저장
+                        </button>
+                        <button id="btn-copy-all" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-sky-300 px-2 py-0.5 rounded border border-slate-700 font-medium cursor-pointer" title="전체 측정 기록을 텍스트로 복사">
+                            전체복사
+                        </button>
+                        <button id="btn-clear-measurements" class="text-[11px] text-rose-400 hover:text-rose-300 font-medium cursor-pointer ml-1">
+                            비우기
+                        </button>
+                    </div>
+                </div>
+
+                <div id="measurement-list" class="flex-1 overflow-y-auto p-2.5 space-y-2 text-xs">
+                    <div id="empty-list-msg" class="text-center text-slate-500 py-6 text-xs leading-relaxed">
+                        아직 측정된 치수선이 없습니다.<br>
+                        화면에서 지점을 클릭하면 치수 기록이 저장되며,<br>
+                        <strong>이름을 클릭해 메모</strong>를 남길 수 있습니다.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 섹션 4: 사이드바 하단 광고 슬롯 (Google AdSense / Kakao AdFit 대응) -->
+            <div id="sidebar-ad-wrapper" class="p-2.5 border-t border-slate-800 bg-slate-950/60 shrink-0">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="ad-badge">AD · SPONSORED</span>
+                    <button id="btn-open-ad-guide" class="text-[10px] text-amber-400/90 hover:text-amber-300 underline cursor-pointer">
+                        💰 광고 수익 설정법
+                    </button>
+                </div>
+                <!-- 실제 AdSense/AdFit 코드가 들어갈 슬롯 -->
+                <div id="ad-slot-sidebar" class="ad-container min-h-[76px] rounded-xl border border-slate-800/90 bg-slate-900/70 p-2.5 text-center">
+                    <div class="space-y-1">
+                        <div class="text-[11px] font-bold text-slate-300">정밀 도면·인테리어 실측 도구 ScaleRuler Pro</div>
+                        <p class="text-[10px] text-slate-400 leading-tight">
+                            Google AdSense 또는 카카오 애드핏 승인 후 <code class="text-amber-300">AD_CONFIG</code>에 코드를 넣으면 이 영역에 자동으로 배너 광고가 표시됩니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- ==================== 하단 정보·가이드·FAQ·광고 섹션 (SEO 및 애드센스 승인 최적화) ==================== -->
+    <section id="guide-section" class="bg-slate-950 border-t border-slate-800/80 py-12 px-4 sm:px-8">
+        <div class="max-w-6xl mx-auto space-y-12">
+
+            <!-- 상단 가로형 반응형 광고 배너 영역 -->
+            <div class="rounded-2xl border border-slate-800 bg-slate-900/50 p-4 text-center">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="ad-badge">ADVERTISEMENT</span>
+                    <span class="text-[11px] text-slate-500">반응형 디스플레이 광고 영역 (Google AdSense / Kakao AdFit)</span>
+                </div>
+                <div id="ad-slot-banner" class="min-h-[90px] flex flex-col items-center justify-center rounded-xl bg-slate-950/60 border border-dashed border-slate-800 p-4">
+                    <p class="text-xs font-semibold text-slate-300">광고 배너 영역 (728×90 / 반응형)</p>
+                    <p class="text-[11px] text-slate-500 mt-1">우측 하단 [광고 수익 설정법]을 눌러 내 애드센스 펍코드(ca-pub-XXXX)나 애드핏 단위를 연동할 수 있습니다.</p>
+                </div>
+            </div>
+
+            <!-- 1. 핵심 기능 및 사용 가이드 -->
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-400/15 border border-amber-400/30 flex items-center justify-center text-amber-300 font-extrabold text-lg">1</div>
+                    <h3 class="text-base font-bold text-white">마우스 2점 클릭 배율 보정</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        축척을 모르는 아파트 평면도, 부동산 도면, 부품 사진이라도 걱정 없습니다. 도면에 적힌 치수 구간 하나만 찾아 <strong>시작점과 끝점을 클릭</strong>하고 실제 숫자(예: <code class="text-amber-300">3600 mm</code>)를 입력하면 전체 도면의 픽셀 대 실제 길이 비율이 자동으로 맞춰집니다.
+                    </p>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-sky-400/15 border border-sky-400/30 flex items-center justify-center text-sky-300 font-extrabold text-lg">2</div>
+                    <h3 class="text-base font-bold text-white">거리 · 면적(평수) · 각도 동시 측정</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        단순 직선 거리뿐만 아니라, 방의 대각선 두 점을 찍어 <strong>가로×세로 치수와 면적(㎡ 및 평수)</strong>을 한 번에 계산하는 면적 측정 모드, 여러 구간의 합계를 구하는 연속 거리 측정, 3점 각도기 기능을 모두 무료로 제공합니다.
+                    </p>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-400/15 border border-emerald-400/30 flex items-center justify-center text-emerald-300 font-extrabold text-lg">3</div>
+                    <h3 class="text-base font-bold text-white">신용카드 1:1 모니터 실물 자</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        사진 없이 모니터 화면에 실제 물건(반지 호수, 볼트 규격, 우표 등)을 대고 재고 싶다면 상단 <strong>[💳 실물 1:1 보정]</strong>을 눌러보세요. 국제 표준 규격인 신용카드 가로 길이(85.60mm) 또는 모니터 인치에 맞춰 내 모니터 해상도(DPI)에 딱 맞는 실물 눈금자로 변신합니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 2. 업로드 사진 처리 방식 및 개인정보 보호 안내 (사용자 핵심 질문 완벽 해설) -->
+            <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-emerald-950/40 border border-emerald-500/30 rounded-2xl p-6 sm:p-8 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <h2 class="text-lg font-extrabold text-white flex items-center gap-2">
+                        <span>🛡️</span>
+                        <span>이 사이트에 올린 사진·도면은 어떻게 처리되나요? (개인정보 및 보안 완벽 안내)</span>
+                    </h2>
+                    <span class="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold">
+                        서버 전송 ZERO · 100% 로컬 작동
+                    </span>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    ScaleRuler Pro는 <strong>서버리스 클라이언트(Client-Side Only) 아키텍처</strong>로 설계되었습니다. 사용자가 <kbd class="px-1.5 py-0.5 bg-slate-800 rounded">Ctrl+V</kbd>로 붙여넣거나 파일 열기로 선택한 사진·설계 도면은 인터넷을 통해 외부 서버나 클라우드로 <strong>단 1바이트도 전송되지 않습니다.</strong>
+                </p>
+                <div class="grid sm:grid-cols-3 gap-4 pt-2 text-xs">
+                    <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4">
+                        <div class="font-bold text-emerald-300 mb-1">① 내 컴퓨터 안에서만 열림</div>
+                        <p class="text-slate-400 leading-relaxed">브라우저 표준 <code class="text-slate-200">FileReader</code>와 <code class="text-slate-200">HTML5 Canvas</code> 기술만을 사용하여 오직 사용자 본인의 PC·스마트폰 화면 메모리에만 그림을 표시합니다.</p>
+                    </div>
+                    <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4">
+                        <div class="font-bold text-emerald-300 mb-1">② 사이트 운영자도 볼 수 없음</div>
+                        <p class="text-slate-400 leading-relaxed">별도의 파일 저장 서버나 데이터베이스(DB) 자체가 존재하지 않으므로, 웹사이트 제작자나 제3자가 사용자가 올린 도면이나 개인 사진을 열람하거나 수집하는 것이 원천적으로 불가능합니다.</p>
+                    </div>
+                    <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4">
+                        <div class="font-bold text-emerald-300 mb-1">③ 창을 닫으면 즉시 완전 소멸</div>
+                        <p class="text-slate-400 leading-relaxed">브라우저 탭을 닫거나 새로고침(<kbd>F5</kbd>)하는 순간 메모리에서 이미지 데이터가 즉시 파기됩니다. 기업의 보안 도면이나 개인 사진도 안심하고 측정하세요.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. 단축키 및 자주 묻는 질문 (FAQ) -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- 단축키 안내 -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                    <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+                        <span>⌨️</span>
+                        <span>빠른 작업을 위한 키보드 단축키</span>
+                    </h3>
+                    <div class="space-y-2.5 text-xs">
+                        <div class="flex justify-between py-1.5 border-b border-slate-800">
+                            <span class="text-slate-300">클립보드 캡처 이미지 바로 붙여넣기</span>
+                            <kbd class="px-2 py-0.5 bg-slate-800 border border-slate-700 rounded font-mono-num text-amber-300">Ctrl + V</kbd>
+                        </div>
+                        <div class="flex justify-between py-1.5 border-b border-slate-800">
+                            <span class="text-slate-300">방금 측정한 치수선 실행 취소</span>
+                            <kbd class="px-2 py-0.5 bg-slate-800 border border-slate-700 rounded font-mono-num text-amber-300">Ctrl + Z</kbd>
+                        </div>
+                        <div class="flex justify-between py-1.5 border-b border-slate-800">
+                            <span class="text-slate-300">수평(0°) · 대각선(45°) · 수직(90°) 직교 스냅</span>
+                            <kbd class="px-2 py-0.5 bg-slate-800 border border-slate-700 rounded font-mono-num text-amber-300">Shift 누른 채 이동</kbd>
+                        </div>
+                        <div class="flex justify-between py-1.5 border-b border-slate-800">
+                            <span class="text-slate-300">도면 화면 드래그 이동 (Pan)</span>
+                            <kbd class="px-2 py-0.5 bg-slate-800 border border-slate-700 rounded font-mono-num text-amber-300">Space + 드래그 / 마우스 휠 클릭</kbd>
+                        </div>
+                        <div class="flex justify-between py-1.5 border-b border-slate-800">
+                            <span class="text-slate-300">모드 빠른 전환 (배율 / 거리 / 면적 / 연속 / 각도)</span>
+                            <kbd class="px-2 py-0.5 bg-slate-800 border border-slate-700 rounded font-mono-num text-amber-300">C / M / S / P / A</kbd>
+                        </div>
+                        <div class="flex justify-between py-1.5">
+                            <span class="text-slate-300">플로팅 눈금자 가로 / 세로 회전</span>
+                            <kbd class="px-2 py-0.5 bg-slate-800 border border-slate-700 rounded font-mono-num text-amber-300">R</kbd>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+                    <h3 class="text-base font-bold text-white mb-2 flex items-center gap-2">
+                        <span>💡</span>
+                        <span>자주 묻는 질문 (FAQ)</span>
+                    </h3>
+                    <div class="space-y-3 text-xs">
+                        <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5">
+                            <div class="font-bold text-amber-300 mb-1">Q. 화면을 마우스 휠로 확대/축소하면 측정 치수가 달라지나요?</div>
+                            <p class="text-slate-300 leading-relaxed">아니요! 모든 기준선과 치수선은 원본 도면의 월드 좌표계를 기준으로 계산되므로, 마우스 휠로 아무리 확대해서 정밀하게 점을 찍어도 실제 치수(mm/cm/m)와 눈금자 간격이 정확하게 연동됩니다.</p>
+                        </div>
+                        <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5">
+                            <div class="font-bold text-amber-300 mb-1">Q. 이미 찍은 치수선의 위치를 조금 수정할 수 있나요?</div>
+                            <p class="text-slate-300 leading-relaxed">네! 측정 완료된 치수선의 양 끝 동그란 마커 위에 마우스를 가져가서 드래그하면 돋보기를 보면서 끝점 위치를 1픽셀 단위로 미세하게 수정할 수 있습니다.</p>
+                        </div>
+                        <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5">
+                            <div class="font-bold text-amber-300 mb-1">Q. 측정한 도면을 이미지나 엑셀로 저장할 수 있나요?</div>
+                            <p class="text-slate-300 leading-relaxed">상단 <strong>[💾 이미지 저장]</strong> 버튼을 누르면 도면 위에 치수선이 깔끔하게 그려진 PNG 파일이 다운로드되며, 우측 목록의 <strong>[엑셀저장]</strong> 버튼으로 CSV 표 파일을 내려받을 수 있습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 상용 웹사이트 스타일 푸터 (개인정보 처리방침 / 이용약관 / 쿠키정책) ==================== -->
+    <footer class="bg-slate-950 border-t border-slate-900 text-slate-400 text-xs py-8 px-4 sm:px-8 mt-auto">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+            <div class="space-y-1.5">
+                <div class="flex items-center gap-2 font-extrabold text-slate-200 text-sm">
+                    <span class="inline-block w-3 h-3 rounded-xs bg-amber-400"></span>
+                    <span>ScaleRuler Pro (컴퓨터용 정밀 배율 측정 자)</span>
+                </div>
+                <p class="text-[11px] text-slate-500">
+                    본 웹 서비스는 사용자의 이미지나 도면 파일을 서버로 수집·저장하지 않는 100% 브라우저 로컬 기반 무료 유틸리티입니다.
+                </p>
+                <p class="text-[11px] text-slate-600">
+                    Copyright © <span id="footer-year">2026</span> ScaleRuler Pro. All rights reserved.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-medium">
+                <a href="privacy.html" id="link-privacy-modal" class="hover:text-amber-300 transition">개인정보 처리방침</a>
+                <a href="terms.html" id="link-terms-modal" class="hover:text-amber-300 transition">이용약관</a>
+                <button id="btn-footer-cookie" class="hover:text-amber-300 transition cursor-pointer">쿠키 및 광고 안내</button>
+                <button id="btn-footer-security" class="hover:text-emerald-300 text-emerald-400/90 transition cursor-pointer">사진 비저장 보안원리</button>
+                <button id="btn-footer-monetize" class="hover:text-amber-300 transition cursor-pointer">광고 수익화 가이드</button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== 하단 쿠키 및 개인정보 동의 배너 (자연스러운 상용 웹사이트 형태) ==================== -->
+    <div id="cookie-banner" class="hidden fixed bottom-0 inset-x-0 z-50 bg-slate-900/95 backdrop-blur-md border-t border-slate-700 p-3 sm:px-6 shadow-2xl">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+            <div class="text-slate-300 leading-relaxed">
+                🍪 <strong>개인정보 및 쿠키 안내:</strong> 본 사이트는 업로드하신 사진·도면을 서버에 절대 저장하지 않습니다. 다만 사용자 설정(배율·테마) 유지 및 Google AdSense 등 맞춤형 광고 제공을 위해 브라우저 쿠키(localStorage 포함)를 사용할 수 있습니다. 자세한 내용은 <a href="privacy.html" class="underline text-amber-300 hover:text-amber-200">개인정보 처리방침</a>을 확인해 주세요.
+            </div>
+            <div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                <a href="privacy.html" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-medium">자세히 보기</a>
+                <button id="btn-accept-cookies" class="px-4 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold cursor-pointer shadow">확인 및 동의</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 모달 1: 직접 수치 / 도면 축척 입력 ==================== -->
+    <div id="modal-direct-scale" class="fixed inset-0 bg-slate-950/75 backdrop-blur-xs hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-5 shadow-2xl">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                    직접 배율 수치 입력
+                </h3>
+                <button id="btn-close-direct-modal" class="text-slate-400 hover:text-white cursor-pointer">✕</button>
+            </div>
+            <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+                화면의 몇 픽셀(px)이 실제 몇(mm/cm/m)에 해당하는지 직접 입력하거나, 마우스로 2점을 찍어 보정할 수 있습니다.
+            </p>
+            <div class="space-y-3 text-xs mb-5">
+                <div>
+                    <label class="block text-slate-300 font-semibold mb-1">기준 화면 픽셀 길이 (px)</label>
+                    <input type="number" id="modal-input-px" step="any" min="0.1" value="100" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 font-mono-num font-bold text-white">
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="col-span-2">
+                        <label class="block text-slate-300 font-semibold mb-1">대응하는 실제 치수</label>
+                        <input type="number" id="modal-input-real" step="any" min="0.0001" value="100" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 font-mono-num font-bold text-amber-300">
+                    </div>
+                    <div>
+                        <label class="block text-slate-300 font-semibold mb-1">단위</label>
+                        <select id="modal-select-unit" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-2 font-mono-num font-bold text-amber-300">
+                            <option value="mm" selected>mm</option>
+                            <option value="cm">cm</option>
+                            <option value="m">m</option>
+                            <option value="inch">inch</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <button id="btn-save-direct-modal" class="w-full py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs rounded-lg cursor-pointer">
+                배율 적용하기
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== 모달 2: 신용카드 / 모니터 인치 1:1 실물 크기 보정 ==================== -->
+    <div id="modal-card-calib" class="fixed inset-0 bg-slate-950/80 backdrop-blur-xs hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full p-5 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 class="text-sm font-extrabold text-white flex items-center gap-2">
+                    <span>💳</span>
+                    <span>모니터 화면 1:1 실물 크기 보정 (신용카드 / 모니터 인치)</span>
+                </h3>
+                <button id="btn-close-card-modal" class="text-slate-400 hover:text-white cursor-pointer">✕</button>
+            </div>
+
+            <p class="text-xs text-slate-300 leading-relaxed">
+                모니터 화면에 실제 <strong>신용카드(가로 85.60mm)</strong>를 대고 아래 노란색 카드 박스의 가로 폭이 실제 카드와 똑같아지도록 슬라이더를 조절하거나, 사용 중인 <strong>모니터 크기</strong>를 선택하세요.
+            </p>
+
+            <!-- 모니터 프리셋 버튼 -->
+            <div class="space-y-1.5">
+                <div class="text-[11px] font-semibold text-slate-400">빠른 모니터 프리셋 선택 (FHD 1920×1080 기준):</div>
+                <div class="flex flex-wrap gap-1.5">
+                    <button type="button" data-ppi="141.2" class="monitor-preset-btn px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs border border-slate-700 cursor-pointer">15.6인치 노트북</button>
+                    <button type="button" data-ppi="91.8" class="monitor-preset-btn px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs border border-slate-700 cursor-pointer">24인치 모니터</button>
+                    <button type="button" data-ppi="81.6" class="monitor-preset-btn px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs border border-slate-700 cursor-pointer">27인치 모니터</button>
+                    <button type="button" data-ppi="108.8" class="monitor-preset-btn px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs border border-slate-700 cursor-pointer">27인치 QHD(2560)</button>
+                    <button type="button" data-ppi="68.8" class="monitor-preset-btn px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs border border-slate-700 cursor-pointer">32인치 모니터</button>
+                </div>
+            </div>
+
+            <!-- 실제 신용카드 비교 박스 -->
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col items-center justify-center overflow-x-auto">
+                <div id="card-preview-box" class="bg-gradient-to-br from-amber-300 to-amber-500 text-slate-950 rounded-xl p-3 shadow-lg flex flex-col justify-between select-none border-2 border-white/60" style="width: 323px; height: 204px;">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-extrabold tracking-wider">STANDARD CARD</span>
+                        <span class="text-[11px] font-mono-num font-bold bg-slate-950/20 px-2 py-0.5 rounded">85.60 × 53.98 mm</span>
+                    </div>
+                    <div class="w-9 h-7 rounded bg-amber-200/80 border border-slate-900/30 my-1"></div>
+                    <div class="text-[11px] font-bold">실제 카드를 화면 왼쪽 끝에 맞춰 대보세요 ↔</div>
+                </div>
+            </div>
+
+            <!-- 슬라이더 -->
+            <div class="space-y-1">
+                <div class="flex justify-between text-xs">
+                    <span class="text-slate-400">카드 가로 픽셀 크기 조절:</span>
+                    <span id="card-px-label" class="font-mono-num font-bold text-amber-300">323 px = 85.60 mm (96.0 DPI)</span>
+                </div>
+                <input type="range" id="slider-card-px" min="180" max="600" step="1" value="323" class="w-full accent-amber-400 cursor-pointer">
+            </div>
+
+            <button id="btn-apply-card-calib" class="w-full py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs rounded-xl shadow cursor-pointer">
+                이 크기로 1:1 실물 배율 적용하기
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== 모달 3: 사진 보안 & 개인정보 처리방침 / 이용약관 / 광고 수익화 가이드 통합 모달 ==================== -->
+    <div id="modal-info" class="fixed inset-0 bg-slate-950/80 backdrop-blur-xs hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl">
+            <div class="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
+                <h3 id="modal-info-title" class="text-base font-extrabold text-white">안내</h3>
+                <button id="btn-close-info-modal" class="text-slate-400 hover:text-white text-sm px-2 py-1 cursor-pointer">✕</button>
+            </div>
+            <div id="modal-info-body" class="p-5 overflow-y-auto text-xs text-slate-300 space-y-4 leading-relaxed">
+                <!-- 동적 콘텐츠 삽입 -->
+            </div>
+            <div class="px-5 py-3 border-t border-slate-800 flex justify-end gap-2">
+                <button id="btn-ok-info-modal" class="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs rounded-lg cursor-pointer">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 토스트 알림 -->
+    <div id="toast" class="fixed bottom-14 left-1/2 -translate-x-1/2 bg-slate-800 border border-slate-600 text-white px-4 py-2 rounded-full shadow-2xl text-xs font-semibold flex items-center gap-2 opacity-0 pointer-events-none transition-all duration-300 z-50">
+        <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+        <span id="toast-text">알림</span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+:root {
+    --bg-primary: #020617;
+    --bg-panel: #0f172a;
+    --bg-card: #1e293b;
+    --border-color: #1e293b;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --canvas-bg: #020617;
+    --grid-color: rgba(148, 163, 184, 0.08);
+}
+
+html.light-mode {
+    --bg-primary: #f1f5f9;
+    --bg-panel: #ffffff;
+    --bg-card: #f8fafc;
+    --border-color: #cbd5e1;
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --canvas-bg: #f8fafc;
+    --grid-color: rgba(71, 85, 105, 0.12);
+}
+
+body {
+    font-family: 'Noto Sans KR', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.font-mono-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
+
+/* Floating Screen Ruler Shadow & Glass Effect */
+#floating-ruler {
+    box-shadow: 0 18px 42px -8px rgba(0, 0, 0, 0.6), 0 4px 16px -2px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(2px);
+    transition: opacity 0.15s ease;
+}
+
+/* Tool Button Active States */
+.tool-btn {
+    transition: all 0.15s ease;
+}
+.tool-btn.active {
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+    border-color: #60a5fa !important;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.35);
+}
+.tool-btn.active svg {
+    color: #ffffff !important;
+}
+.tool-btn.active-calib {
+    background-color: #d97706 !important;
+    color: #ffffff !important;
+    border-color: #fbbf24 !important;
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.45);
+}
+.tool-btn.active-area {
+    background-color: #059669 !important;
+    color: #ffffff !important;
+    border-color: #34d399 !important;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.4);
+}
+.tool-btn.active-poly {
+    background-color: #0891b2 !important;
+    color: #ffffff !important;
+    border-color: #22d3ee !important;
+    box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.4);
+}
+
+/* Light mode overrides for workspace panels */
+html.light-mode .app-panel {
+    background-color: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    color: #0f172a !important;
+}
+html.light-mode .app-subpanel {
+    background-color: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+    color: #1e293b !important;
+}
+html.light-mode #canvas-viewport {
+    background-color: #f1f5f9 !important;
+}
+
+/* Ad Slot Styling */
+.ad-container {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.ad-badge {
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: rgba(148, 163, 184, 0.15);
+    color: #94a3b8;
+}
+
+/* Touch action none on canvas and ruler for smooth mobile use */
+#main-canvas,
+#floating-ruler,
+#ruler-drag-area,
+#ruler-resize-grip {
+    touch-action: none;
+}
+
+/* Pulse animation for step 1 calibration guide */
+@keyframes soft-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); }
+    50% { box-shadow: 0 0 0 6px rgba(251, 191, 36, 0); }
+}
+.pulse-highlight {
+    animation: soft-pulse 2s infinite;
+}
